@@ -12,7 +12,7 @@ export default function TripDetailScreen() {
   const router = useRouter();
   
   const { user } = useAuthStore();
-  const { currentTrip, riders, addRider, updateRiderStatus, setCurrentTrip } = useTripStore();
+  const { currentTrip, riders, addRider, updateRiderStatus, endTrip } = useTripStore();
 
   if (!currentTrip || currentTrip.id !== id) {
     return (
@@ -32,15 +32,18 @@ export default function TripDetailScreen() {
   const numberOfRiders = riders.length;
   const costPerRider = numberOfRiders > 0 ? currentTrip.total_cost / numberOfRiders : 0;
 
-  const handleCheckIn = () => {
+  const [isCheckingIn, setIsCheckingIn] = React.useState(false);
+
+  const handleCheckIn = async () => {
     if (!user || isCheckedIn) return;
-    addRider({
-      id: 'rider-' + Math.floor(Math.random() * 10000),
+    setIsCheckingIn(true);
+    await addRider({
       trip_id: currentTrip.id,
       rider_id: user.id,
       share_amount: 0,
       payment_status: 'pending'
     });
+    setIsCheckingIn(false);
   };
 
   const handlePay = async () => {
@@ -65,8 +68,12 @@ export default function TripDetailScreen() {
     }
   };
 
-  const handleEndTrip = () => {
-    setCurrentTrip(null);
+  const [isEnding, setIsEnding] = React.useState(false);
+
+  const handleEndTrip = async () => {
+    setIsEnding(true);
+    await endTrip();
+    setIsEnding(false);
     router.replace('/(tabs)');
   };
 
@@ -135,7 +142,7 @@ export default function TripDetailScreen() {
 
           {/* Action Buttons */}
           {!isDriver && !isCheckedIn && (
-            <Button className="w-full bg-zinc-900 rounded-full mb-4" size="lg" onPress={handleCheckIn}>
+            <Button className="w-full bg-zinc-900 rounded-full mb-4" size="lg" isLoading={isCheckingIn} onPress={handleCheckIn}>
               <Text className="text-white font-semibold">Check In</Text>
             </Button>
           )}
@@ -147,7 +154,7 @@ export default function TripDetailScreen() {
           )}
 
           {isDriver && (
-            <Button className="w-full rounded-full border border-red-200 bg-red-50" size="lg" onPress={handleEndTrip}>
+            <Button className="w-full rounded-full border border-red-200 bg-red-50" size="lg" isLoading={isEnding} onPress={handleEndTrip}>
               <Text className="text-red-600 font-bold">Close Trip</Text>
             </Button>
           )}

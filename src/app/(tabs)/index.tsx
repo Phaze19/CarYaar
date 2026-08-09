@@ -9,8 +9,12 @@ import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 
 export default function HomeScreen() {
   const { user } = useAuthStore();
-  const { currentTrip } = useTripStore();
+  const { currentTrip, fetchActiveTrip } = useTripStore();
   const router = useRouter();
+
+  React.useEffect(() => {
+    fetchActiveTrip();
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-zinc-50">

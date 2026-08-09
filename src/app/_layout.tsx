@@ -9,9 +9,13 @@ import { useAuthStore } from "../store/useAuthStore";
 import "../global.css";
 
 export default function RootLayout(): JSX.Element {
-  const { user } = useAuthStore();
+  const { user, checkSession } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
+
+  useEffect(() => {
+    checkSession();
+  }, []);
 
   useEffect(() => {
     const inAuthGroup = segments[0] === '(auth)';

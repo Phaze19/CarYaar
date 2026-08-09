@@ -9,15 +9,17 @@ import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 
 export default function CreateTripScreen() {
   const { user } = useAuthStore();
-  const { setCurrentTrip } = useTripStore();
+  const { createTrip } = useTripStore();
   const router = useRouter();
+  const [isCreating, setIsCreating] = useState(false);
 
   const [distance, setDistance] = useState('22');
   const [fuelPrice, setFuelPrice] = useState('105.5');
   
-  const handleCreateTrip = () => {
+  const handleCreateTrip = async () => {
     if (!user) return;
     
+    setIsCreating(true);
     const dist = parseFloat(distance) || 0;
     const price = parseFloat(fuelPrice) || 0;
     const avg = user.default_fuel_avg || 15;
@@ -25,7 +27,6 @@ export default function CreateTripScreen() {
     const totalCost = (dist / avg) * price;
     
     const newTrip = {
-      id: 'trip-' + Math.floor(Math.random() * 10000),
       driver_id: user.id,
       date: new Date().toISOString().split('T')[0],
       distance_km: dist,
@@ -34,8 +35,12 @@ export default function CreateTripScreen() {
       status: 'active' as const,
     };
     
-    setCurrentTrip(newTrip);
-    router.replace(`/trip/${newTrip.id}`);
+    const created = await createTrip(newTrip);
+    setIsCreating(false);
+    
+    if (created) {
+      router.replace(`/trip/${created.id}`);
+    }
   };
 
   const calculatedCost = ((parseFloat(distance) || 0) / (user?.default_fuel_avg || 15) * (parseFloat(fuelPrice) || 0)).toFixed(2);
@@ -87,6 +92,7 @@ export default function CreateTripScreen() {
               <Button 
                 className="w-full bg-zinc-900 rounded-full" 
                 size="lg" 
+                isLoading={isCreating}
                 onPress={handleCreateTrip}
               >
                 <Text className="text-white font-semibold">Start Trip</Text>
