@@ -68,7 +68,11 @@ export const useTripStore = create<TripState>((set, get) => ({
   endTrip: async () => {
     const trip = get().currentTrip;
     if (trip) {
-      await supabase.from('trips').update({ status: 'completed' }).eq('id', trip.id);
+      const { error } = await supabase.from('trips').update({ status: 'completed' }).eq('id', trip.id);
+      if (error) {
+        alert(error.message);
+        throw error;
+      }
     }
     get().unsubscribeFromRiders();
     set({ currentTrip: null, riders: [] });

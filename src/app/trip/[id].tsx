@@ -72,9 +72,13 @@ export default function TripDetailScreen() {
 
   const handleEndTrip = async () => {
     setIsEnding(true);
-    await endTrip();
-    setIsEnding(false);
-    router.replace('/(tabs)');
+    try {
+      await endTrip();
+      router.replace('/(tabs)');
+    } catch (e: any) {
+      alert("Error ending trip: " + e.message);
+      setIsEnding(false);
+    }
   };
 
   return (
