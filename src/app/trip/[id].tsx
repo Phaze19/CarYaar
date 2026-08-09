@@ -16,10 +16,10 @@ export default function TripDetailScreen() {
 
   if (!currentTrip || currentTrip.id !== id) {
     return (
-      <View className="flex-1 justify-center items-center bg-zinc-50">
-        <Text className="text-zinc-500 mb-4">Trip not found.</Text>
-        <Button className="rounded-full bg-zinc-900" onPress={() => router.back()}>
-          <Text className="text-white">Return Home</Text>
+      <View className="flex-1 justify-center items-center bg-indigo-50">
+        <Text className="text-indigo-500 mb-4 font-bold">Trip not found.</Text>
+        <Button className="rounded-full bg-indigo-600" onPress={() => router.back()}>
+          <Text className="text-white font-bold">Return Home</Text>
         </Button>
       </View>
     );
@@ -78,61 +78,67 @@ export default function TripDetailScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-zinc-50">
+    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-indigo-50">
       <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 60 }} className="flex-1">
         
         <Animated.View entering={FadeInDown.duration(600).springify()}>
-          <Button size="sm" className="self-start mb-6 rounded-full bg-zinc-200" onPress={() => router.back()}>
-            <Text className="text-zinc-700 font-medium px-2">Back</Text>
+          <Button size="sm" className="self-start mb-6 rounded-2xl bg-white shadow-sm shadow-indigo-100" onPress={() => router.back()}>
+            <Text className="text-indigo-900 font-bold px-2">Back</Text>
           </Button>
 
-          <Text className="text-xs font-medium tracking-widest uppercase text-zinc-400 mb-1">Active Route</Text>
-          <Text className="text-4xl font-black text-zinc-900 tracking-tighter mb-8">Overview.</Text>
+          <Text className="text-xs font-bold tracking-widest uppercase text-indigo-400 mb-2">Active Route</Text>
+          <Text className="text-5xl font-black text-indigo-950 tracking-tighter mb-8">Overview.</Text>
         </Animated.View>
 
-        <Animated.View entering={FadeIn.duration(800).delay(100)} className="w-full bg-white border border-zinc-200 rounded-3xl p-6 mb-8">
-          <View className="flex-row justify-between mb-4 pb-4 border-b border-zinc-100">
-            <Text className="text-zinc-500 font-medium">Distance</Text>
-            <Text className="font-semibold text-zinc-800">{currentTrip.distance_km} km</Text>
+        <Animated.View entering={FadeIn.duration(800).delay(100)} className="w-full bg-white rounded-3xl p-6 shadow-xl shadow-indigo-100/50 mb-8 border border-indigo-50">
+          <View className="flex-row justify-between mb-4 pb-4 border-b border-indigo-50">
+            <Text className="text-indigo-400 font-bold uppercase text-xs tracking-wider">Distance</Text>
+            <Text className="font-black text-indigo-950 text-xl">{currentTrip.distance_km} km</Text>
           </View>
-          <View className="flex-row justify-between mb-4 pb-4 border-b border-zinc-100">
-            <Text className="text-zinc-500 font-medium">Total Cost</Text>
-            <Text className="font-bold text-zinc-900">₹{currentTrip.total_cost.toFixed(2)}</Text>
+          <View className="flex-row justify-between mb-4 pb-4 border-b border-indigo-50">
+            <Text className="text-indigo-400 font-bold uppercase text-xs tracking-wider">Total Cost</Text>
+            <Text className="font-black text-indigo-950 text-xl">₹{currentTrip.total_cost.toFixed(2)}</Text>
           </View>
           <View className="flex-row justify-between items-baseline mt-2">
-            <Text className="text-zinc-500 font-medium">Split per Rider</Text>
-            <Text className="font-black text-2xl text-zinc-900 tracking-tighter">₹{costPerRider.toFixed(2)}</Text>
+            <Text className="text-indigo-400 font-bold uppercase text-xs tracking-wider">Split per Rider</Text>
+            <Text className="font-black text-4xl text-indigo-600 tracking-tighter">₹{costPerRider.toFixed(2)}</Text>
           </View>
         </Animated.View>
 
         <Animated.View entering={FadeIn.duration(800).delay(200)}>
           <View className="flex-row justify-between items-end mb-4">
-            <Text className="text-lg font-bold text-zinc-900">Manifest</Text>
-            <Text className="text-xs text-zinc-400 font-medium uppercase tracking-wider">{numberOfRiders} Riders</Text>
+            <Text className="text-2xl font-black text-indigo-950 tracking-tight">Manifest</Text>
+            <View className="bg-indigo-100 px-3 py-1 rounded-full">
+              <Text className="text-xs text-indigo-600 font-bold uppercase tracking-wider">{numberOfRiders} Riders</Text>
+            </View>
           </View>
           
           <View className="gap-3 mb-10">
             {riders.length === 0 ? (
-              <View className="p-6 border border-zinc-200 border-dashed rounded-2xl items-center justify-center">
-                <Text className="text-zinc-400 font-medium">No one has checked in yet.</Text>
+              <View className="p-8 border-2 border-indigo-200 border-dashed rounded-3xl items-center justify-center bg-indigo-50/50">
+                <Text className="text-indigo-400 font-bold">No one has checked in yet.</Text>
               </View>
             ) : (
               riders.map(rider => (
-                <View key={rider.id} className="flex-row justify-between items-center bg-white border border-zinc-100 p-4 rounded-2xl shadow-sm shadow-zinc-100/50">
+                <View key={rider.id} className="flex-row justify-between items-center bg-white border border-indigo-50 p-4 rounded-3xl shadow-lg shadow-indigo-100/50">
                   <View className="flex-row items-center gap-4">
-                    <View className="w-10 h-10 rounded-full bg-zinc-100 items-center justify-center">
-                      <Text className="font-bold text-zinc-500">R</Text>
+                    <View className="w-12 h-12 rounded-2xl bg-indigo-600 items-center justify-center shadow-lg shadow-indigo-200">
+                      <Text className="font-black text-xl text-white">R</Text>
                     </View>
                     <View>
-                      <Text className="font-semibold text-zinc-900">Passenger</Text>
-                      <Text className="text-xs text-zinc-500">₹{costPerRider.toFixed(2)}</Text>
+                      <Text className="font-black text-lg text-indigo-950 tracking-tight">Passenger</Text>
+                      <Text className="text-sm font-bold text-indigo-500">₹{costPerRider.toFixed(2)}</Text>
                     </View>
                   </View>
                   <View>
                     {rider.payment_status === 'paid' ? (
-                      <Text className="text-green-600 font-bold text-sm tracking-wide uppercase">Paid</Text>
+                      <View className="bg-green-100 px-3 py-1 rounded-full">
+                        <Text className="text-green-700 font-black text-sm tracking-wide uppercase">Paid</Text>
+                      </View>
                     ) : (
-                      <Text className="text-zinc-400 font-semibold text-sm tracking-wide uppercase">Pending</Text>
+                      <View className="bg-orange-100 px-3 py-1 rounded-full">
+                        <Text className="text-orange-600 font-black text-sm tracking-wide uppercase">Pending</Text>
+                      </View>
                     )}
                   </View>
                 </View>
@@ -142,20 +148,20 @@ export default function TripDetailScreen() {
 
           {/* Action Buttons */}
           {!isDriver && !isCheckedIn && (
-            <Button className="w-full bg-zinc-900 rounded-full mb-4" size="lg" isLoading={isCheckingIn} onPress={handleCheckIn}>
-              <Text className="text-white font-semibold">Check In</Text>
+            <Button className="w-full bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-300 mb-4" size="lg" isLoading={isCheckingIn} onPress={handleCheckIn}>
+              <Text className="text-white font-bold text-lg">Check In</Text>
             </Button>
           )}
 
           {!isDriver && isCheckedIn && myRiderRecord?.payment_status === 'pending' && (
-            <Button className="w-full bg-zinc-900 rounded-full mb-4" size="lg" onPress={handlePay}>
-              <Text className="text-white font-semibold">Pay ₹{costPerRider.toFixed(2)} via UPI</Text>
+            <Button className="w-full bg-green-500 rounded-2xl shadow-lg shadow-green-300 mb-4" size="lg" onPress={handlePay}>
+              <Text className="text-white font-bold text-lg">Pay ₹{costPerRider.toFixed(2)} via UPI</Text>
             </Button>
           )}
 
           {isDriver && (
-            <Button className="w-full rounded-full border border-red-200 bg-red-50" size="lg" isLoading={isEnding} onPress={handleEndTrip}>
-              <Text className="text-red-600 font-bold">Close Trip</Text>
+            <Button className="w-full rounded-2xl bg-red-50 border border-red-100" size="lg" isLoading={isEnding} onPress={handleEndTrip}>
+              <Text className="text-red-600 font-black text-lg">Close Trip</Text>
             </Button>
           )}
         </Animated.View>

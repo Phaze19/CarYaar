@@ -26,56 +26,41 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   login: async (name, phone, upiId = '') => {
     set({ isLoading: true });
     
-    // Using a synthetic email/password based on phone for rapid frictionless testing without Twilio
-    const cleanPhone = phone.replace(/[^0-9]/g, '');
-    if (cleanPhone.length < 5) {
-      alert("Please enter a valid phone number.");
+    if (!name || !phone) {
+      alert("Name and Phone are required.");
       set({ isLoading: false });
       return;
     }
-    const email = `${cleanPhone}@caryaar.app`;
-    const password = 'CarYaarPassword123!';
 
-    let authId = '';
+    // Use Anonymous Sign-in to bypass strict email provider limits
+    const { data: authData, error: authError } = await supabase.auth.signInAnonymously();
 
-    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-      email, password
-    });
-
-    if (signInError) {
-      // If not found, sign up
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-        email, password
-      });
-      if (signUpError || !signUpData.user) {
-        set({ isLoading: false });
-        alert(signUpError?.message || 'Error signing up');
-        return;
-      }
-      authId = signUpData.user.id;
-      
-      const newUser = {
-        id: authId,
-        name,
-        phone,
-        upi_id: upiId,
-        default_fuel_avg: 15.0
-      };
-      await supabase.from('users').insert(newUser);
-      set({ user: newUser, isLoading: false });
+    if (authError || !authData.user) {
+      set({ isLoading: false });
+      alert(authError?.message || 'Error authenticating.');
       return;
     }
 
-    authId = signInData.user.id;
-    const { data: profile } = await supabase.from('users').select('*').eq('id', authId).single();
+    const authId = authData.user.id;
     
-    if (!profile) {
-      const newUser = { id: authId, name, phone, upi_id: upiId, default_fuel_avg: 15.0 };
-      await supabase.from('users').insert(newUser);
-      set({ user: newUser, isLoading: false });
-    } else {
-      set({ user: profile, isLoading: false });
+    // Anonymous users always get a brand new UUID, so we insert a new row
+    const newUser = { 
+      id: authId, 
+      name, 
+      phone, 
+      upi_id: upiId, 
+      default_fuel_avg: 15.0 
+    };
+    
+    const { error: insertError } = await supabase.from('users').insert(newUser);
+    
+    if (insertError) {
+      alert(insertError.message);
+      set({ isLoading: false });
+      return;
     }
+
+    set({ user: newUser, isLoading: false });
   },
 
   logout: async () => {

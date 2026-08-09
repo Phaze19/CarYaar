@@ -46,63 +46,65 @@ export default function CreateTripScreen() {
   const calculatedCost = ((parseFloat(distance) || 0) / (user?.default_fuel_avg || 15) * (parseFloat(fuelPrice) || 0)).toFixed(2);
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-zinc-50">
+    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-indigo-50">
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={{ padding: 24 }}>
           
           <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-10 mt-4">
-            <Text className="text-zinc-400 font-medium tracking-widest uppercase text-xs mb-1">New Trip</Text>
-            <Text className="text-4xl font-black text-zinc-900 tracking-tighter mb-2">Set Details.</Text>
-            <Text className="text-zinc-500 text-sm">Enter the trip parameters below.</Text>
+            <Text className="text-indigo-500 font-bold tracking-widest uppercase text-xs mb-2">New Journey</Text>
+            <Text className="text-5xl font-black text-indigo-950 tracking-tighter mb-2">Set Details.</Text>
+            <Text className="text-indigo-600 font-medium text-base">Enter the trip parameters below.</Text>
           </Animated.View>
 
           <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="space-y-6 gap-6">
             <Input 
-              variant="underlined"
+              variant="flat"
+              color="primary"
               label="Total Distance (km)" 
               placeholder="0.0" 
               value={distance}
               onChangeText={setDistance}
               keyboardType="decimal-pad"
-              classNames={{ input: "text-zinc-900 text-lg", label: "text-zinc-500 font-medium" }}
+              style={{ color: '#1e1b4b', fontSize: 18, fontWeight: '600' }}
             />
             <Input 
-              variant="underlined"
+              variant="flat"
+              color="primary"
               label="Fuel Price (per Litre)" 
               placeholder="0.0" 
               value={fuelPrice}
               onChangeText={setFuelPrice}
               keyboardType="decimal-pad"
-              classNames={{ input: "text-zinc-900 text-lg", label: "text-zinc-500 font-medium" }}
+              style={{ color: '#1e1b4b', fontSize: 18, fontWeight: '600' }}
             />
             
-            <View className="p-6 bg-white border border-zinc-200 rounded-3xl mt-4">
-              <View className="flex-row justify-between items-baseline mb-4">
-                <Text className="text-sm font-medium text-zinc-500">Estimated Cost</Text>
-                <Text className="font-black text-3xl text-zinc-900 tracking-tighter">
+            <View className="p-6 bg-indigo-600 rounded-3xl mt-4 shadow-xl shadow-indigo-300">
+              <View className="flex-row justify-between items-baseline mb-4 border-b border-indigo-400 pb-4">
+                <Text className="text-sm font-bold text-indigo-200 uppercase tracking-wider">Estimated Cost</Text>
+                <Text className="font-black text-4xl text-white tracking-tighter">
                   ₹{calculatedCost}
                 </Text>
               </View>
-              <Text className="text-xs text-zinc-400 leading-relaxed">
+              <Text className="text-sm text-indigo-100 leading-relaxed font-medium">
                 Based on your saved vehicle fuel economy of {user?.default_fuel_avg} km/l. This amount will be split among checked-in passengers.
               </Text>
             </View>
 
-            <View className="mt-8 gap-3">
+            <View className="mt-8 gap-4">
               <Button 
-                className="w-full bg-zinc-900 rounded-full" 
+                className="w-full bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-300" 
                 size="lg" 
                 isLoading={isCreating}
                 onPress={handleCreateTrip}
               >
-                <Text className="text-white font-semibold">Start Trip</Text>
+                <Text className="text-white font-bold text-lg">Start Trip</Text>
               </Button>
               <Button 
-                className="w-full rounded-full border border-zinc-200 bg-transparent" 
+                className="w-full rounded-2xl bg-indigo-100" 
                 size="lg" 
                 onPress={() => router.back()}
               >
-                <Text className="text-zinc-600 font-semibold">Cancel</Text>
+                <Text className="text-indigo-800 font-bold text-lg">Cancel</Text>
               </Button>
             </View>
           </Animated.View>

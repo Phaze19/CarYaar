@@ -17,20 +17,25 @@ function TabIcon({ name, color, focused }: { name: IoniconName; color: ColorValu
 export default function TabsLayout(): JSX.Element {
   return (
     <Tabs 
-      screenOptions={{ 
-        headerShown: false, 
-        tabBarActiveTintColor: '#18181b', // zinc-900
-        tabBarInactiveTintColor: '#a1a1aa', // zinc-400
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: '#4f46e5', // indigo-600
+        tabBarInactiveTintColor: '#a5b4fc', // indigo-300
         tabBarStyle: {
           backgroundColor: '#ffffff',
-          borderTopWidth: 1,
-          borderTopColor: '#f4f4f5', // zinc-100
-          elevation: 0,
-          shadowOpacity: 0,
-          height: 80,
+          borderTopWidth: 0,
+          elevation: 10,
+          shadowOpacity: 0.1,
+          shadowRadius: 10,
+          height: 60,
+          paddingBottom: 8,
           paddingTop: 8,
         },
-        tabBarShowLabel: false,
+        tabBarLabelStyle: {
+          fontFamily: 'System',
+          fontWeight: '700',
+          fontSize: 12,
+        },
       }}
     >
       <Tabs.Screen

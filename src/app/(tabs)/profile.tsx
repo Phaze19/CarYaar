@@ -14,8 +14,7 @@ export default function ProfileScreen() {
 
   const handleSave = async () => {
     setIsSaving(true);
-    await new Promise(r => setTimeout(r, 600));
-    updateProfile({
+    await updateProfile({
       upi_id: upiId,
       default_fuel_avg: parseFloat(fuelAvg) || 15
     });
@@ -26,63 +25,65 @@ export default function ProfileScreen() {
   if (!user) return null;
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-zinc-50">
+    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-indigo-50">
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={{ padding: 24 }} className="flex-1">
           
           <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-10 mt-4">
-            <Text className="text-zinc-400 font-medium tracking-widest uppercase text-xs mb-1">Settings</Text>
-            <Text className="text-4xl font-black text-zinc-900 tracking-tighter mb-2">Account.</Text>
+            <Text className="text-indigo-400 font-bold tracking-widest uppercase text-xs mb-1">Preferences</Text>
+            <Text className="text-5xl font-black text-indigo-950 tracking-tighter mb-2">Profile.</Text>
           </Animated.View>
           
-          <Animated.View entering={FadeInUp.duration(800).delay(100).springify()} className="mb-10">
-            <View className="flex-row items-center gap-4 mb-4">
-              <View className="w-16 h-16 rounded-full bg-zinc-200 items-center justify-center">
-                <Text className="text-2xl font-black text-zinc-500">{user.name.charAt(0)}</Text>
+          <Animated.View entering={FadeInUp.duration(800).delay(100).springify()} className="mb-10 bg-white p-4 rounded-3xl shadow-xl shadow-indigo-100/50 border border-indigo-50">
+            <View className="flex-row items-center gap-4">
+              <View className="w-16 h-16 rounded-2xl bg-indigo-600 items-center justify-center shadow-lg shadow-indigo-200">
+                <Text className="text-3xl font-black text-white">{user.name.charAt(0)}</Text>
               </View>
               <View>
-                <Text className="text-xl font-bold text-zinc-900 tracking-tight">{user.name}</Text>
-                <Text className="text-sm text-zinc-500 font-medium">{user.phone}</Text>
+                <Text className="text-2xl font-black text-indigo-950 tracking-tight mb-1">{user.name}</Text>
+                <Text className="text-base text-indigo-500 font-bold">{user.phone}</Text>
               </View>
             </View>
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="space-y-6 gap-6">
+          <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="space-y-6 gap-6 bg-white p-6 rounded-3xl shadow-xl shadow-indigo-100/50 border border-indigo-50">
             <Input 
-              variant="underlined"
+              variant="flat"
+              color="primary"
               label="UPI ID" 
               placeholder="name@okbank" 
               value={upiId}
               onChangeText={setUpiId}
               autoCapitalize="none"
-              classNames={{ input: "text-zinc-900 text-lg", label: "text-zinc-500 font-medium" }}
+              style={{ color: '#1e1b4b', fontSize: 18, fontWeight: '600' }}
             />
             <Input 
-              variant="underlined"
+              variant="flat"
+              color="primary"
               label="Default Fuel Average (km/l)" 
               placeholder="0.0" 
               value={fuelAvg}
               onChangeText={setFuelAvg}
               keyboardType="decimal-pad"
-              classNames={{ input: "text-zinc-900 text-lg", label: "text-zinc-500 font-medium" }}
+              style={{ color: '#1e1b4b', fontSize: 18, fontWeight: '600' }}
             />
             
-            <View className="mt-8 gap-3">
+            <View className="mt-4 gap-4">
               <Button 
-                className="w-full bg-zinc-900 rounded-full" 
+                className="w-full bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-200" 
                 size="lg"
                 isLoading={isSaving}
                 onPress={handleSave}
               >
-                <Text className="text-white font-semibold">Save Changes</Text>
+                <Text className="text-white font-bold text-lg">Save Changes</Text>
               </Button>
 
               <Button 
-                className="w-full rounded-full bg-transparent" 
+                className="w-full rounded-2xl bg-red-50" 
                 size="lg"
                 onPress={logout}
               >
-                <Text className="text-zinc-500 font-medium">Sign Out</Text>
+                <Text className="text-red-600 font-bold text-lg">Sign Out</Text>
               </Button>
             </View>
           </Animated.View>
