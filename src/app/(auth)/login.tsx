@@ -28,55 +28,52 @@ export default function LoginScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-indigo-50 px-8 py-16 justify-center">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-slate-50 px-8 py-16 justify-center">
         
         <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-12">
-          <View className="w-20 h-20 bg-indigo-600 rounded-3xl items-center justify-center mb-6 shadow-xl shadow-indigo-200">
-            <Text className="text-white text-4xl font-black tracking-tighter">CY</Text>
+          <View className="w-16 h-16 bg-slate-900 rounded-xl items-center justify-center mb-6 shadow-sm">
+            <Text className="text-white text-3xl font-bold tracking-tighter">CY</Text>
           </View>
-          <Text className="text-5xl font-black text-indigo-950 tracking-tighter mb-3">CarYaar</Text>
-          <Text className="text-lg text-indigo-600 font-bold">Drive together. Split the cost.</Text>
+          <Text className="text-4xl font-bold text-slate-900 tracking-tight mb-2">Welcome to CarYaar</Text>
+          <Text className="text-base text-slate-500">Sign in to your account to continue.</Text>
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-white p-6 rounded-3xl shadow-2xl shadow-indigo-100/50 space-y-4 gap-4">
+        <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4 gap-5">
           <Input 
-            variant="flat"
-            color="primary"
-            label="Name" 
-            placeholder="e.g. Rahul" 
+            variant="bordered"
+            label="Full Name" 
+            placeholder="Jane Doe" 
             value={name}
             onChangeText={setName}
             autoCapitalize="words"
-            style={{ color: '#1e1b4b', fontSize: 18, fontWeight: '600' }}
+            classNames={{ input: "text-slate-900", label: "text-slate-500 font-medium", inputWrapper: "border-slate-200" }}
           />
           <Input 
-            variant="flat"
-            color="primary"
-            label="Phone" 
+            variant="bordered"
+            label="Phone Number" 
             placeholder="1234567890" 
             value={phone}
             onChangeText={setPhone}
             keyboardType="phone-pad"
-            style={{ color: '#1e1b4b', fontSize: 18, fontWeight: '600' }}
+            classNames={{ input: "text-slate-900", label: "text-slate-500 font-medium", inputWrapper: "border-slate-200" }}
           />
           <Input 
-            variant="flat"
-            color="primary"
-            label="UPI ID" 
+            variant="bordered"
+            label="UPI ID (Optional)" 
             placeholder="name@okbank" 
             value={upiId}
             onChangeText={setUpiId}
             autoCapitalize="none"
-            style={{ color: '#1e1b4b', fontSize: 18, fontWeight: '600' }}
+            classNames={{ input: "text-slate-900", label: "text-slate-500 font-medium", inputWrapper: "border-slate-200" }}
           />
           
           <Button 
-            className="w-full mt-4 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-300" 
+            className="w-full mt-2 bg-slate-900 rounded-xl" 
             size="lg" 
             isLoading={isLoading}
             onPress={handleLogin}
           >
-            <Text className="text-white font-bold text-lg">{isLoading ? "Authenticating" : "Get Started"}</Text>
+            <Text className="text-white font-semibold text-base">{isLoading ? "Authenticating..." : "Continue"}</Text>
           </Button>
         </Animated.View>
       </ScrollView>

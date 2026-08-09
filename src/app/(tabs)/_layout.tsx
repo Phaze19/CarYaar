@@ -19,21 +19,21 @@ export default function TabsLayout(): JSX.Element {
     <Tabs 
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#4f46e5', // indigo-600
-        tabBarInactiveTintColor: '#a5b4fc', // indigo-300
+        tabBarActiveTintColor: '#0f172a', // slate-900
+        tabBarInactiveTintColor: '#94a3b8', // slate-400
         tabBarStyle: {
           backgroundColor: '#ffffff',
-          borderTopWidth: 0,
-          elevation: 10,
-          shadowOpacity: 0.1,
-          shadowRadius: 10,
+          borderTopWidth: 1,
+          borderTopColor: '#e2e8f0', // slate-200
+          elevation: 0,
+          shadowOpacity: 0,
           height: 60,
           paddingBottom: 8,
           paddingTop: 8,
         },
         tabBarLabelStyle: {
           fontFamily: 'System',
-          fontWeight: '700',
+          fontWeight: '600',
           fontSize: 12,
         },
       }}

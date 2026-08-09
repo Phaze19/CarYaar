@@ -17,67 +17,67 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-indigo-50">
+    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-slate-50">
       <ScrollView contentContainerStyle={{ padding: 24 }} className="flex-1">
         
-        <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-8 mt-4 bg-indigo-600 rounded-3xl p-6 shadow-xl shadow-indigo-300">
-          <Text className="text-indigo-200 font-bold tracking-widest uppercase text-xs mb-2">Welcome Back</Text>
-          <Text className="text-4xl font-black text-white tracking-tighter">{user?.name?.split(' ')[0]}</Text>
+        <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-8 mt-2">
+          <Text className="text-slate-500 font-medium text-sm mb-1">Overview</Text>
+          <Text className="text-3xl font-bold text-slate-900 tracking-tight">Dashboard</Text>
         </Animated.View>
 
         {currentTrip ? (
           <Animated.View entering={FadeIn.duration(800)}>
             <View className="flex-row items-center justify-between mb-4">
-              <Text className="text-sm font-bold tracking-widest uppercase text-indigo-800">Active Trip</Text>
-              <View className="bg-green-100 px-3 py-1 rounded-full">
-                <Text className="text-green-700 text-xs font-bold uppercase">Live</Text>
+              <Text className="text-sm font-semibold text-slate-700">Active Trip</Text>
+              <View className="bg-teal-50 border border-teal-200 px-2.5 py-1 rounded-md">
+                <Text className="text-teal-700 text-xs font-semibold">In Progress</Text>
               </View>
             </View>
             
-            <View className="w-full bg-white rounded-3xl p-6 shadow-xl shadow-indigo-100/50 mb-8 border border-indigo-50">
-              <View className="flex-row justify-between items-baseline mb-6 border-b border-indigo-50 pb-4">
-                <Text className="text-indigo-400 font-bold uppercase text-xs tracking-wider">Total Cost</Text>
-                <Text className="text-4xl font-black text-indigo-950 tracking-tighter">
+            <View className="w-full bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-8">
+              <View className="flex-row justify-between items-baseline mb-6 border-b border-slate-100 pb-4">
+                <Text className="text-slate-500 font-medium text-sm">Estimated Total</Text>
+                <Text className="text-3xl font-bold text-slate-900 tracking-tight">
                   ₹{currentTrip.total_cost.toFixed(2)}
                 </Text>
               </View>
               
               <View className="flex-row justify-between mb-8">
                 <View>
-                  <Text className="text-xs text-indigo-400 uppercase font-bold tracking-wider mb-1">Distance</Text>
-                  <Text className="font-black text-indigo-950 text-xl">{currentTrip.distance_km} km</Text>
+                  <Text className="text-xs text-slate-500 font-medium mb-1">Distance</Text>
+                  <Text className="font-semibold text-slate-900 text-lg">{currentTrip.distance_km} km</Text>
                 </View>
                 <View className="items-end">
-                  <Text className="text-xs text-indigo-400 uppercase font-bold tracking-wider mb-1">Fuel Rate</Text>
-                  <Text className="font-black text-indigo-950 text-xl">₹{currentTrip.fuel_price}/L</Text>
+                  <Text className="text-xs text-slate-500 font-medium mb-1">Fuel Rate</Text>
+                  <Text className="font-semibold text-slate-900 text-lg">₹{currentTrip.fuel_price}/L</Text>
                 </View>
               </View>
 
               <Button 
-                className="w-full bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-200"
+                className="w-full bg-slate-900 rounded-xl"
                 size="lg"
                 onPress={() => router.push(`/trip/${currentTrip.id}`)}
               >
-                <Text className="text-white font-bold text-lg">View Details</Text>
+                <Text className="text-white font-semibold text-base">View Details</Text>
               </Button>
             </View>
           </Animated.View>
         ) : (
-          <Animated.View entering={FadeIn.duration(800)} className="items-center justify-center py-12 mt-4 bg-white rounded-3xl shadow-xl shadow-indigo-100/50 p-6 border border-indigo-50">
-            <View className="w-24 h-24 bg-indigo-100 rounded-full items-center justify-center mb-6">
-              <Text className="text-indigo-600 text-4xl font-black">GO</Text>
+          <Animated.View entering={FadeIn.duration(800)} className="items-center justify-center py-10 mt-4 bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <View className="w-16 h-16 bg-slate-100 rounded-xl border border-slate-200 items-center justify-center mb-6">
+              <Text className="text-slate-400 text-2xl font-bold">+</Text>
             </View>
-            <Text className="text-3xl font-black text-indigo-950 text-center tracking-tight mb-3">Ready to drive?</Text>
-            <Text className="text-indigo-500 font-medium text-center mb-10 px-2 leading-relaxed text-base">
-              Start a new trip to let your passengers check in and automatically calculate the cost split.
+            <Text className="text-xl font-bold text-slate-900 text-center tracking-tight mb-2">No Active Trips</Text>
+            <Text className="text-slate-500 text-center mb-8 px-2 text-sm leading-relaxed">
+              Start a new trip to let passengers check in and track shared costs automatically.
             </Text>
             
             <Button 
-              className="w-full bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-300"
+              className="w-full bg-slate-900 rounded-xl"
               size="lg"
               onPress={() => router.push('/trip/create')}
             >
-              <Text className="text-white font-bold text-lg">Start New Trip</Text>
+              <Text className="text-white font-semibold text-base">Create Trip</Text>
             </Button>
           </Animated.View>
         )}
