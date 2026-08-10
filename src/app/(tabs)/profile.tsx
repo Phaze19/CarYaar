@@ -25,28 +25,30 @@ export default function ProfileScreen() {
   if (!user) return null;
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-slate-50">
+    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-slate-900">
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={{ padding: 24 }} className="flex-1">
+        <ScrollView contentContainerStyle={{ padding: 24 }}>
           
-          <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-8 mt-2">
-            <Text className="text-slate-500 font-medium text-sm mb-1">Preferences</Text>
-            <Text className="text-3xl font-bold text-slate-900 tracking-tight">Profile</Text>
+          <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-8 mt-2 flex-row justify-between items-start">
+            <View>
+              <Text className="text-slate-400 font-medium text-sm mb-1">Account</Text>
+              <Text className="text-3xl font-bold text-white tracking-tight">Profile</Text>
+            </View>
           </Animated.View>
-          
-          <Animated.View entering={FadeInUp.duration(800).delay(100).springify()} className="mb-8 bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+
+          <Animated.View entering={FadeInUp.duration(800).delay(100).springify()} className="mb-8 bg-slate-800/80 p-5 rounded-3xl shadow-sm border border-slate-700/50">
             <View className="flex-row items-center gap-4">
-              <View className="w-14 h-14 rounded-full bg-slate-100 border border-slate-200 items-center justify-center">
-                <Text className="text-xl font-bold text-slate-600">{user.name.charAt(0)}</Text>
+              <View className="w-16 h-16 bg-cyan-500/20 border border-cyan-500/30 rounded-2xl items-center justify-center">
+                <Text className="text-2xl font-bold text-cyan-400">{user.name.charAt(0)}</Text>
               </View>
               <View>
-                <Text className="text-xl font-bold text-slate-900 tracking-tight mb-0.5">{user.name}</Text>
-                <Text className="text-sm text-slate-500 font-medium">{user.phone}</Text>
+                <Text className="text-xl font-bold text-white tracking-tight mb-0.5">{user.name}</Text>
+                <Text className="text-sm text-slate-400 font-medium">{user.phone}</Text>
               </View>
             </View>
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="space-y-5 gap-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+          <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="space-y-5 gap-5 bg-slate-800/80 p-6 rounded-3xl shadow-sm border border-slate-700/50 mb-8">
             <Input 
               variant="bordered"
               label="UPI ID" 
@@ -54,7 +56,7 @@ export default function ProfileScreen() {
               value={upiId}
               onChangeText={setUpiId}
               autoCapitalize="none"
-              classNames={{ input: "text-slate-900", label: "text-slate-500 font-medium", inputWrapper: "border-slate-200" }}
+              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
             <Input 
               variant="bordered"
@@ -63,28 +65,58 @@ export default function ProfileScreen() {
               value={fuelAvg}
               onChangeText={setFuelAvg}
               keyboardType="decimal-pad"
-              classNames={{ input: "text-slate-900", label: "text-slate-500 font-medium", inputWrapper: "border-slate-200" }}
+              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
             
             <View className="mt-2 gap-3">
               <Button 
-                className="w-full bg-slate-900 rounded-xl" 
+                className="w-full bg-cyan-500 rounded-2xl shadow-[0_0_15px_rgba(6,182,212,0.4)]" 
                 size="lg"
                 isLoading={isSaving}
                 onPress={handleSave}
               >
-                <Text className="text-white font-semibold text-base">Save Changes</Text>
-              </Button>
-
-              <Button 
-                className="w-full rounded-xl bg-white border border-red-200" 
-                size="lg"
-                onPress={logout}
-              >
-                <Text className="text-red-600 font-semibold text-base">Sign Out</Text>
+                <Text className="text-slate-950 font-bold text-base">Save Changes</Text>
               </Button>
             </View>
           </Animated.View>
+
+          <Animated.View entering={FadeInUp.duration(800).delay(300).springify()}>
+            <Text className="text-xl font-bold text-white tracking-tight mb-4">Settings</Text>
+            
+            <View className="bg-slate-800/80 rounded-3xl border border-slate-700/50 overflow-hidden mb-6">
+              <View className="p-4 flex-row justify-between items-center border-b border-slate-700/50">
+                <View className="flex-row items-center">
+                  <Text className="text-xl mr-3">🔔</Text>
+                  <Text className="text-white font-medium">Notifications</Text>
+                </View>
+                <Text className="text-slate-400 text-sm">Enabled</Text>
+              </View>
+              <View className="p-4 flex-row justify-between items-center border-b border-slate-700/50">
+                <View className="flex-row items-center">
+                  <Text className="text-xl mr-3">⛽</Text>
+                  <Text className="text-white font-medium">Vehicle Mileage</Text>
+                </View>
+                <Text className="text-slate-400 text-sm">{user.default_fuel_avg} km/l</Text>
+              </View>
+              <View className="p-4 flex-row justify-between items-center">
+                <View className="flex-row items-center">
+                  <Text className="text-xl mr-3">🎨</Text>
+                  <Text className="text-white font-medium">App Theme</Text>
+                </View>
+                <Text className="text-slate-400 text-sm">Dark Neumorphic</Text>
+              </View>
+            </View>
+
+            <Button 
+              className="w-full bg-slate-900 border border-red-500/50 rounded-2xl mb-8" 
+              variant="flat"
+              size="lg"
+              onPress={logout}
+            >
+              <Text className="text-red-400 font-semibold text-base">Sign Out</Text>
+            </Button>
+          </Animated.View>
+
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

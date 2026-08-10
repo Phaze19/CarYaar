@@ -11,7 +11,7 @@ type IoniconName = ComponentProps<typeof Ionicons>["name"];
 
 function TabIcon({ name, color, focused }: { name: IoniconName; color: ColorValue; focused: boolean }): JSX.Element {
   return (
-    <View className={`items-center justify-center p-2 rounded-full ${focused ? 'bg-zinc-100' : ''}`}>
+    <View className={`items-center justify-center p-2 rounded-2xl ${focused ? 'bg-slate-800' : ''}`}>
       <Ionicons name={name} size={22} color={color} />
     </View>
   );
@@ -30,22 +30,22 @@ export default function TabsLayout(): JSX.Element {
     <Tabs 
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#0f172a', // slate-900
-        tabBarInactiveTintColor: '#94a3b8', // slate-400
+        tabBarActiveTintColor: '#22d3ee', // cyan-400
+        tabBarInactiveTintColor: '#64748b', // slate-500
         tabBarStyle: {
-          backgroundColor: '#ffffff',
-          borderTopWidth: 1,
-          borderTopColor: '#e2e8f0', // slate-200
+          backgroundColor: '#0f172a', // slate-900
+          borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
+          height: 65,
+          paddingBottom: 10,
+          paddingTop: 10,
         },
         tabBarLabelStyle: {
           fontFamily: 'System',
           fontWeight: '600',
-          fontSize: 12,
+          fontSize: 11,
+          marginTop: 4,
         },
       }}
     >

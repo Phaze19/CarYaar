@@ -84,66 +84,66 @@ export default function TripDetailScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-slate-50">
+    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-slate-900">
       <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 60 }} className="flex-1">
         
         <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-6">
-          <Button size="sm" variant="bordered" className="self-start mb-6 rounded-lg border-slate-300 bg-white" onPress={() => router.back()}>
-            <Text className="text-slate-700 font-medium px-2">Back</Text>
+          <Button size="sm" variant="bordered" className="self-start mb-6 rounded-lg border-slate-700 bg-slate-800" onPress={() => router.back()}>
+            <Text className="text-slate-300 font-medium px-2">Back</Text>
           </Button>
 
-          <Text className="text-sm font-medium text-slate-500 mb-1">Route Details</Text>
-          <Text className="text-3xl font-bold text-slate-900 tracking-tight">Trip Manifest</Text>
+          <Text className="text-sm font-medium text-slate-400 mb-1">Route Details</Text>
+          <Text className="text-3xl font-bold text-white tracking-tight">Trip Manifest</Text>
         </Animated.View>
 
-        <Animated.View entering={FadeIn.duration(800).delay(100)} className="w-full bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-8">
-          <View className="flex-row justify-between mb-4 pb-4 border-b border-slate-100">
-            <Text className="text-slate-500 font-medium text-sm">Distance</Text>
-            <Text className="font-semibold text-slate-900 text-lg">{currentTrip.distance_km} km</Text>
+        <Animated.View entering={FadeIn.duration(800).delay(100)} className="w-full bg-slate-800/80 rounded-3xl p-6 shadow-sm border border-slate-700/50 mb-8">
+          <View className="flex-row justify-between mb-4 pb-4 border-b border-slate-700/50">
+            <Text className="text-slate-400 font-medium text-sm">Distance</Text>
+            <Text className="font-semibold text-white text-lg">{currentTrip.distance_km} km</Text>
           </View>
-          <View className="flex-row justify-between mb-4 pb-4 border-b border-slate-100">
-            <Text className="text-slate-500 font-medium text-sm">Total Cost</Text>
-            <Text className="font-semibold text-slate-900 text-lg">₹{currentTrip.total_cost.toFixed(2)}</Text>
+          <View className="flex-row justify-between mb-4 pb-4 border-b border-slate-700/50">
+            <Text className="text-slate-400 font-medium text-sm">Total Cost</Text>
+            <Text className="font-semibold text-white text-lg">₹{currentTrip.total_cost.toFixed(2)}</Text>
           </View>
           <View className="flex-row justify-between items-baseline mt-2">
-            <Text className="text-slate-500 font-medium text-sm">Split per Rider</Text>
-            <Text className="font-bold text-3xl text-teal-600 tracking-tight">₹{costPerRider.toFixed(2)}</Text>
+            <Text className="text-slate-400 font-medium text-sm">Split per Rider</Text>
+            <Text className="font-bold text-3xl text-cyan-400 tracking-tight">₹{costPerRider.toFixed(2)}</Text>
           </View>
         </Animated.View>
 
         <Animated.View entering={FadeIn.duration(800).delay(200)}>
           <View className="flex-row justify-between items-end mb-4">
-            <Text className="text-xl font-bold text-slate-900 tracking-tight">Passengers</Text>
-            <View className="bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-md">
-              <Text className="text-xs text-slate-600 font-semibold">{numberOfRiders} Checked In</Text>
+            <Text className="text-xl font-bold text-white tracking-tight">Passengers</Text>
+            <View className="bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-md">
+              <Text className="text-xs text-slate-300 font-semibold">{numberOfRiders} Checked In</Text>
             </View>
           </View>
           
           <View className="gap-3 mb-10">
             {riders.length === 0 ? (
-              <View className="p-8 border border-slate-200 border-dashed rounded-2xl items-center justify-center bg-slate-50">
-                <Text className="text-slate-500 font-medium text-sm">Waiting for passengers...</Text>
+              <View className="p-8 border border-slate-700/50 border-dashed rounded-3xl items-center justify-center bg-slate-800/50">
+                <Text className="text-slate-400 font-medium text-sm">Waiting for passengers...</Text>
               </View>
             ) : (
               riders.map(rider => (
-                <View key={rider.id} className="flex-row justify-between items-center bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+                <View key={rider.id} className="flex-row justify-between items-center bg-slate-800/80 border border-slate-700/50 p-4 rounded-3xl">
                   <View className="flex-row items-center gap-3">
-                    <View className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 items-center justify-center">
-                      <Text className="font-bold text-slate-600">R</Text>
+                    <View className="w-10 h-10 rounded-xl bg-slate-700/50 border border-slate-600 items-center justify-center">
+                      <Text className="font-bold text-slate-300">R</Text>
                     </View>
                     <View>
-                      <Text className="font-semibold text-slate-900">Passenger</Text>
-                      <Text className="text-sm font-medium text-slate-500">Share: ₹{costPerRider.toFixed(2)}</Text>
+                      <Text className="font-semibold text-white">Passenger</Text>
+                      <Text className="text-sm font-medium text-slate-400">Share: ₹{costPerRider.toFixed(2)}</Text>
                     </View>
                   </View>
                   <View>
                     {rider.payment_status === 'paid' ? (
-                      <View className="bg-teal-50 border border-teal-200 px-2 py-1 rounded-md">
-                        <Text className="text-teal-700 font-semibold text-xs">Paid</Text>
+                      <View className="bg-cyan-500/20 border border-cyan-500/30 px-2 py-1 rounded-md">
+                        <Text className="text-cyan-400 font-semibold text-xs">Paid</Text>
                       </View>
                     ) : (
-                      <View className="bg-orange-50 border border-orange-200 px-2 py-1 rounded-md">
-                        <Text className="text-orange-700 font-semibold text-xs">Pending</Text>
+                      <View className="bg-orange-500/20 border border-orange-500/30 px-2 py-1 rounded-md">
+                        <Text className="text-orange-400 font-semibold text-xs">Pending</Text>
                       </View>
                     )}
                   </View>
@@ -154,20 +154,20 @@ export default function TripDetailScreen() {
 
           {/* Action Buttons */}
           {!isDriver && !isCheckedIn && (
-            <Button className="w-full bg-slate-900 rounded-xl mb-4" size="lg" isLoading={isCheckingIn} onPress={handleCheckIn}>
-              <Text className="text-white font-semibold text-base">Check In</Text>
+            <Button className="w-full bg-cyan-500 rounded-2xl mb-4 shadow-[0_0_15px_rgba(6,182,212,0.4)]" size="lg" isLoading={isCheckingIn} onPress={handleCheckIn}>
+              <Text className="text-slate-950 font-bold text-base">Check In</Text>
             </Button>
           )}
 
           {!isDriver && isCheckedIn && myRiderRecord?.payment_status === 'pending' && (
-            <Button className="w-full bg-teal-600 rounded-xl shadow-sm mb-4" size="lg" onPress={handlePay}>
-              <Text className="text-white font-semibold text-base">Settle ₹{costPerRider.toFixed(2)} via UPI</Text>
+            <Button className="w-full bg-slate-800 border border-cyan-500/50 rounded-2xl shadow-sm mb-4" size="lg" onPress={handlePay}>
+              <Text className="text-cyan-400 font-bold text-base">Settle ₹{costPerRider.toFixed(2)} via UPI</Text>
             </Button>
           )}
 
           {isDriver && (
-            <Button className="w-full rounded-xl bg-white border border-red-200" size="lg" isLoading={isEnding} onPress={handleEndTrip}>
-              <Text className="text-red-600 font-semibold text-base">Complete Trip</Text>
+            <Button className="w-full rounded-2xl bg-slate-900 border border-red-500/50 mt-4" size="lg" isLoading={isEnding} onPress={handleEndTrip}>
+              <Text className="text-red-400 font-semibold text-base">Complete Trip</Text>
             </Button>
           )}
         </Animated.View>

@@ -58,23 +58,26 @@ export default function CreateTripScreen() {
   const calculatedCost = ((parseFloat(distance) || 0) / (user?.default_fuel_avg || 15) * (parseFloat(fuelPrice) || 0)).toFixed(2);
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-slate-50">
+    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-slate-900">
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={{ padding: 24 }}>
+        <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 60 }} className="flex-1">
           
           <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-8 mt-2">
-            <Text className="text-slate-500 font-medium text-sm mb-1">Trip Configuration</Text>
-            <Text className="text-3xl font-bold text-slate-900 tracking-tight">Create Trip</Text>
+            <Button size="sm" variant="bordered" className="self-start mb-6 rounded-lg border-slate-700 bg-slate-800" onPress={() => router.back()}>
+              <Text className="text-slate-300 font-medium px-2">Cancel</Text>
+            </Button>
+            <Text className="text-slate-400 font-medium text-sm mb-1">Driver Mode</Text>
+            <Text className="text-3xl font-bold text-white tracking-tight">Create Trip</Text>
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4 gap-5">
+          <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-slate-800/80 p-6 rounded-3xl shadow-sm border border-slate-700/50 space-y-4 gap-5">
             <Input 
               variant="bordered"
               label="Destination (Optional)" 
               placeholder="e.g. Airport, Office" 
               value={destination}
               onChangeText={setDestination}
-              classNames={{ input: "text-slate-900", label: "text-slate-500 font-medium", inputWrapper: "border-slate-200" }}
+              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
             <Input 
               variant="bordered"
@@ -83,7 +86,7 @@ export default function CreateTripScreen() {
               value={distance}
               onChangeText={setDistance}
               keyboardType="decimal-pad"
-              classNames={{ input: "text-slate-900", label: "text-slate-500 font-medium", inputWrapper: "border-slate-200" }}
+              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
             <Input 
               variant="bordered"
@@ -92,36 +95,16 @@ export default function CreateTripScreen() {
               value={fuelPrice}
               onChangeText={setFuelPrice}
               keyboardType="decimal-pad"
-              classNames={{ input: "text-slate-900", label: "text-slate-500 font-medium", inputWrapper: "border-slate-200" }}
+              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
-            
-            <View className="bg-slate-50 border border-slate-200 p-4 rounded-xl mt-2">
-              <View className="flex-row justify-between items-baseline mb-2">
-                <Text className="text-sm font-semibold text-slate-700">Estimated Total</Text>
-                <Text className="font-bold text-2xl text-slate-900">
-                  ₹{calculatedCost}
-                </Text>
-              </View>
-              <Text className="text-xs text-slate-500 leading-relaxed">
-                Calculated using your saved economy ({user?.default_fuel_avg} km/l). This will be split among checked-in passengers.
-              </Text>
-            </View>
-
-            <View className="mt-4 gap-3">
+            <View className="mt-4 pt-4 border-t border-slate-700/50">
               <Button 
-                className="w-full bg-slate-900 rounded-xl" 
+                className="w-full bg-cyan-500 rounded-2xl shadow-[0_0_15px_rgba(6,182,212,0.4)]" 
                 size="lg" 
                 isLoading={isCreating}
                 onPress={handleCreateTrip}
               >
-                <Text className="text-white font-semibold text-base">Initialize Trip</Text>
-              </Button>
-              <Button 
-                className="w-full bg-white border border-slate-200 rounded-xl" 
-                size="lg" 
-                onPress={() => router.back()}
-              >
-                <Text className="text-slate-700 font-medium text-base">Cancel</Text>
+                <Text className="text-slate-950 font-bold text-base">Start Trip</Text>
               </Button>
             </View>
           </Animated.View>
