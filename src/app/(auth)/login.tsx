@@ -33,10 +33,10 @@ export default function LoginScreen() {
           
           <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-12">
             <View className="w-16 h-16 bg-cyan-500/20 rounded-2xl items-center justify-center mb-6 border border-cyan-500/30">
-              <Text className="text-cyan-400 text-3xl font-bold tracking-tighter">CY</Text>
+              <Text className="text-cyan-400 text-3xl font-bold tracking-tighter font-serif">CY</Text>
             </View>
-            <Text className="text-4xl font-bold text-white tracking-tight mb-2">Welcome to CarYaar</Text>
-            <Text className="text-base text-slate-300">Sign in to your account to continue.</Text>
+            <Text className="text-4xl font-bold text-white tracking-tight mb-2 font-serif">Welcome to CarYaar</Text>
+            <Text className="text-base text-slate-300 font-serif">Sign in to your account to continue.</Text>
           </Animated.View>
 
           <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-slate-800/80 p-6 rounded-3xl border border-slate-700/50 space-y-4 gap-5">
