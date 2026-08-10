@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from '../types';
 
 interface AuthState {
@@ -16,9 +17,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isLoading: false,
 
   checkSession: async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user) {
-      const { data } = await supabase.from('users').select('*').eq('id', session.user.id).single();
+    // Ensure we have an anonymous token for RLS
+    await supabase.auth.signInAnonymously(); 
+    
+    const savedPhone = await AsyncStorage.getItem('caryaar_user_phone');
+    if (savedPhone) {
+      const { data } = await supabase.from('users').select('*').eq('phone', savedPhone).single();
       if (data) set({ user: data });
     }
   },
@@ -32,12 +36,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       return;
     }
 
-    // Use Anonymous Sign-in to bypass strict email provider limits
+    // Ensure we have an anonymous session for database access
     const { data: authData, error: authError } = await supabase.auth.signInAnonymously();
 
     if (authError || !authData.user) {
       set({ isLoading: false });
       alert(authError?.message || 'Error authenticating.');
+      return;
+    }
+
+    // Check if the phone already exists in our database
+    const { data: existingUsers } = await supabase.from('users').select('*').eq('phone', phone);
+    
+    if (existingUsers && existingUsers.length > 0) {
+      // User exists! Just load their data
+      await AsyncStorage.setItem('caryaar_user_phone', phone);
+      set({ user: existingUsers[0], isLoading: false });
       return;
     }
 
@@ -60,10 +74,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       return;
     }
 
+    await AsyncStorage.setItem('caryaar_user_phone', phone);
     set({ user: newUser, isLoading: false });
   },
 
   logout: async () => {
+    await AsyncStorage.removeItem('caryaar_user_phone');
     await supabase.auth.signOut();
     set({ user: null });
   },

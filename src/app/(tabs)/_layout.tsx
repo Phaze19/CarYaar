@@ -46,6 +46,13 @@ export default function TabsLayout(): JSX.Element {
         }}
       />
       <Tabs.Screen
+        name="balances"
+        options={{
+          title: "Balances",
+          tabBarIcon: ({ color, focused }) => <TabIcon name={focused ? "wallet" : "wallet-outline"} color={color} focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
         name="history"
         options={{
           title: "History",

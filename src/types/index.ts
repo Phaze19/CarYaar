@@ -23,3 +23,15 @@ export interface TripRider {
   share_amount: number;
   payment_status: 'pending' | 'paid';
 }
+
+export interface Balance {
+  otherUserId: string;
+  otherUserName: string;
+  netAmount: number; // Positive = they owe you, Negative = you owe them
+}
+
+export interface TripHistory extends Trip {
+  isDriver: boolean;
+  personalShare: number;
+}
+
