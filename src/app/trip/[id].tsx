@@ -13,6 +13,9 @@ export default function TripDetailScreen() {
   
   const { user } = useAuthStore();
   const { currentTrip, riders, addRider, updateRiderStatus, endTrip } = useTripStore();
+  
+  const [isCheckingIn, setIsCheckingIn] = React.useState(false);
+  const [isEnding, setIsEnding] = React.useState(false);
 
   if (!currentTrip || currentTrip.id !== id) {
     return (
@@ -32,7 +35,6 @@ export default function TripDetailScreen() {
   const numberOfRiders = riders.length;
   const costPerRider = numberOfRiders > 0 ? currentTrip.total_cost / numberOfRiders : 0;
 
-  const [isCheckingIn, setIsCheckingIn] = React.useState(false);
 
   const handleCheckIn = async () => {
     if (!user || isCheckedIn) return;
@@ -68,7 +70,7 @@ export default function TripDetailScreen() {
     }
   };
 
-  const [isEnding, setIsEnding] = React.useState(false);
+
 
   const handleEndTrip = async () => {
     setIsEnding(true);

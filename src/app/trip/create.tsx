@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Linking } from 'react-native';
 import { Button, Input } from 'heroui-native';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useTripStore } from '../../store/useTripStore';
@@ -13,11 +13,15 @@ export default function CreateTripScreen() {
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
 
-  const [distance, setDistance] = useState('22');
-  const [fuelPrice, setFuelPrice] = useState('105.5');
+  const [destination, setDestination] = useState('');
+  const [distance, setDistance] = useState('');
+  const [fuelPrice, setFuelPrice] = useState('100');
   
   const handleCreateTrip = async () => {
-    if (!user) return;
+    if (!user || !distance || !fuelPrice) {
+      alert("Please enter both distance and fuel price.");
+      return;
+    }
     
     setIsCreating(true);
     const dist = parseFloat(distance) || 0;
@@ -39,6 +43,14 @@ export default function CreateTripScreen() {
     setIsCreating(false);
     
     if (created) {
+      if (destination) {
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`;
+        try {
+          await Linking.openURL(url);
+        } catch (e) {
+          console.log("Could not open Google Maps", e);
+        }
+      }
       router.replace(`/trip/${created.id}`);
     }
   };
@@ -55,10 +67,18 @@ export default function CreateTripScreen() {
             <Text className="text-3xl font-bold text-slate-900 tracking-tight">Create Trip</Text>
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5 gap-5">
+          <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4 gap-5">
             <Input 
               variant="bordered"
-              label="Total Distance (km)" 
+              label="Destination (Optional)" 
+              placeholder="e.g. Airport, Office" 
+              value={destination}
+              onChangeText={setDestination}
+              classNames={{ input: "text-slate-900", label: "text-slate-500 font-medium", inputWrapper: "border-slate-200" }}
+            />
+            <Input 
+              variant="bordered"
+              label="Estimated Distance (km)" 
               placeholder="0.0" 
               value={distance}
               onChangeText={setDistance}
@@ -67,8 +87,8 @@ export default function CreateTripScreen() {
             />
             <Input 
               variant="bordered"
-              label="Fuel Price (per Litre)" 
-              placeholder="0.0" 
+              label="Current Fuel Price (₹/L)" 
+              placeholder="100" 
               value={fuelPrice}
               onChangeText={setFuelPrice}
               keyboardType="decimal-pad"

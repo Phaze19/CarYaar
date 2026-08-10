@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
 import { Trip, TripRider } from '../types';
 import { RealtimeChannel } from '@supabase/supabase-js';
+import { sendPushNotification } from '../lib/notifications';
 
 interface TripState {
   currentTrip: Trip | null;
@@ -76,11 +77,29 @@ export const useTripStore = create<TripState>((set, get) => ({
 
   endTrip: async () => {
     const trip = get().currentTrip;
+    const riders = get().riders;
+    
     if (trip) {
       const { error } = await supabase.from('trips').update({ status: 'completed' }).eq('id', trip.id);
       if (error) {
         alert(error.message);
         throw error;
+      }
+      
+      // Phase 6: Send push notifications to all passengers
+      const riderIds = riders.map(r => r.rider_id);
+      if (riderIds.length > 0) {
+        const { data: usersData } = await supabase.from('users').select('push_token').in('id', riderIds);
+        if (usersData) {
+          const costPerRider = trip.total_cost / riders.length;
+          const msg = `Trip completed! You owe ₹${costPerRider.toFixed(2)}. Open CarYaar to settle.`;
+          
+          usersData.forEach(u => {
+            if (u.push_token) {
+              sendPushNotification(u.push_token, 'CarYaar: Ride Complete', msg);
+            }
+          });
+        }
       }
     }
     get().unsubscribeFromRiders();

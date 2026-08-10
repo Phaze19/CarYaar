@@ -3,6 +3,9 @@ import { Tabs } from "expo-router";
 import type { ComponentProps, JSX } from "react";
 import type { ColorValue } from "react-native";
 import { View } from "react-native";
+import { useEffect } from "react";
+import { useAuthStore } from "../../store/useAuthStore";
+import { registerForPushNotificationsAsync } from "../../lib/notifications";
 
 type IoniconName = ComponentProps<typeof Ionicons>["name"];
 
@@ -15,6 +18,14 @@ function TabIcon({ name, color, focused }: { name: IoniconName; color: ColorValu
 }
 
 export default function TabsLayout(): JSX.Element {
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    if (user) {
+      registerForPushNotificationsAsync(user.id);
+    }
+  }, [user]);
+
   return (
     <Tabs 
       screenOptions={{
