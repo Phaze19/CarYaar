@@ -75,27 +75,33 @@ export default function CreateTripScreen() {
               variant="bordered"
               label="Destination (Optional)" 
               placeholder="e.g. Airport, Office" 
+              placeholderTextColor="#94a3b8"
+              style={{ color: 'white' }}
               value={destination}
               onChangeText={setDestination}
-              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
+              classNames={{ input: "text-white", label: "text-slate-300 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
             <Input 
               variant="bordered"
               label="Estimated Distance (km)" 
               placeholder="0.0" 
+              placeholderTextColor="#94a3b8"
+              style={{ color: 'white' }}
               value={distance}
               onChangeText={setDistance}
               keyboardType="decimal-pad"
-              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
+              classNames={{ input: "text-white", label: "text-slate-300 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
             <Input 
               variant="bordered"
               label="Current Fuel Price (₹/L)" 
               placeholder="100" 
+              placeholderTextColor="#94a3b8"
+              style={{ color: 'white' }}
               value={fuelPrice}
               onChangeText={setFuelPrice}
               keyboardType="decimal-pad"
-              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
+              classNames={{ input: "text-white", label: "text-slate-300 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
             <View className="mt-4 pt-4 border-t border-slate-700/50">
               <Button 

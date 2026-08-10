@@ -53,19 +53,23 @@ export default function ProfileScreen() {
               variant="bordered"
               label="UPI ID" 
               placeholder="name@okbank" 
+              placeholderTextColor="#94a3b8"
+              style={{ color: 'white' }}
               value={upiId}
               onChangeText={setUpiId}
               autoCapitalize="none"
-              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
+              classNames={{ input: "text-white", label: "text-slate-300 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
             <Input 
               variant="bordered"
               label="Default Fuel Average (km/l)" 
               placeholder="0.0" 
+              placeholderTextColor="#94a3b8"
+              style={{ color: 'white' }}
               value={fuelAvg}
               onChangeText={setFuelAvg}
               keyboardType="decimal-pad"
-              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
+              classNames={{ input: "text-white", label: "text-slate-300 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
             
             <View className="mt-2 gap-3">

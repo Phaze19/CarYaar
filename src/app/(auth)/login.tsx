@@ -36,7 +36,7 @@ export default function LoginScreen() {
               <Text className="text-cyan-400 text-3xl font-bold tracking-tighter">CY</Text>
             </View>
             <Text className="text-4xl font-bold text-white tracking-tight mb-2">Welcome to CarYaar</Text>
-            <Text className="text-base text-slate-400">Sign in to your account to continue.</Text>
+            <Text className="text-base text-slate-300">Sign in to your account to continue.</Text>
           </Animated.View>
 
           <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-slate-800/80 p-6 rounded-3xl border border-slate-700/50 space-y-4 gap-5">
@@ -44,28 +44,34 @@ export default function LoginScreen() {
               variant="bordered"
               label="Full Name" 
               placeholder="Jane Doe" 
+              placeholderTextColor="#94a3b8"
+              style={{ color: 'white' }}
               value={name}
               onChangeText={setName}
               autoCapitalize="words"
-              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
+              classNames={{ input: "text-white", label: "text-slate-300 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
             <Input 
               variant="bordered"
               label="Phone Number" 
               placeholder="1234567890" 
+              placeholderTextColor="#94a3b8"
+              style={{ color: 'white' }}
               value={phone}
               onChangeText={setPhone}
               keyboardType="phone-pad"
-              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
+              classNames={{ input: "text-white", label: "text-slate-300 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
             <Input 
               variant="bordered"
               label="UPI ID (Optional)" 
               placeholder="name@okbank" 
+              placeholderTextColor="#94a3b8"
+              style={{ color: 'white' }}
               value={upiId}
               onChangeText={setUpiId}
               autoCapitalize="none"
-              classNames={{ input: "text-white", label: "text-slate-400 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
+              classNames={{ input: "text-white", label: "text-slate-300 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
             />
             
             <Button 
