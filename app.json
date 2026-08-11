@@ -1,23 +1,23 @@
 {
   "expo": {
-    "name": "caryaar_temp",
-    "slug": "caryaar_temp",
+    "name": "CarYaar",
+    "slug": "caryaar",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "heroui-native-app",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.anuragvedak.caryaar-temp"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.caryaar.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#000000"
       },
-      "predictiveBackGestureEnabled": false,
-      "package": "com.anuragvedak.caryaar_temp"
+      "predictiveBackGestureEnabled": true,
+      "package": "com.caryaar.app"
     },
     "plugins": [
       "expo-router",
@@ -39,9 +39,9 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/splash.png",
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#000000"
         }
       ],
       "expo-status-bar",
