@@ -58,64 +58,67 @@ export default function CreateTripScreen() {
   const calculatedCost = ((parseFloat(distance) || 0) / (user?.default_fuel_avg || 15) * (parseFloat(fuelPrice) || 0)).toFixed(2);
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-slate-900">
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 60 }} className="flex-1">
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1, backgroundColor: '#000000' }}
+    >
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#000000' }} edges={['top']}>
+        <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 100 }} className="bg-black">
           
           <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-8 mt-2">
-            <Button size="sm" variant="bordered" className="self-start mb-6 rounded-lg border-slate-700 bg-slate-800" onPress={() => router.back()}>
-              <Text className="text-slate-300 font-medium px-2" style={{ fontFamily: 'Poppins_500Medium' }}>Cancel</Text>
+            <Button size="sm" variant="bordered" className="self-start mb-6 rounded-lg border-neutral-800 bg-neutral-900" onPress={() => router.back()}>
+              <Text className="text-neutral-300 font-medium px-2" style={{ fontFamily: 'Poppins_500Medium' }}>Cancel</Text>
             </Button>
-            <Text className="text-slate-300 font-medium text-sm mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Driver Mode</Text>
+            <Text className="text-neutral-400 font-medium text-sm mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Driver Mode</Text>
             <Text className="text-3xl font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>Create Trip</Text>
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-slate-800/80 p-6 rounded-3xl shadow-sm border border-slate-700/50 space-y-4 gap-5">
+          <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-neutral-900/80 p-6 rounded-3xl border border-neutral-800 space-y-4 gap-5">
             <Input 
               variant="bordered"
               label="Destination (Optional)" 
               placeholder="e.g. Airport, Office" 
-              placeholderTextColor="#94a3b8"
+              placeholderTextColor="#737373"
               style={{ color: 'white' }}
               value={destination}
               onChangeText={setDestination}
-              classNames={{ input: "text-white", label: "text-slate-300 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
+              classNames={{ input: "text-white", label: "text-neutral-400 font-medium", inputWrapper: "border-neutral-700 bg-black/50" }}
             />
             <Input 
               variant="bordered"
               label="Estimated Distance (km)" 
               placeholder="0.0" 
-              placeholderTextColor="#94a3b8"
+              placeholderTextColor="#737373"
               style={{ color: 'white' }}
               value={distance}
               onChangeText={setDistance}
               keyboardType="decimal-pad"
-              classNames={{ input: "text-white", label: "text-slate-300 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
+              classNames={{ input: "text-white", label: "text-neutral-400 font-medium", inputWrapper: "border-neutral-700 bg-black/50" }}
             />
             <Input 
               variant="bordered"
               label="Current Fuel Price (₹/L)" 
               placeholder="100" 
-              placeholderTextColor="#94a3b8"
+              placeholderTextColor="#737373"
               style={{ color: 'white' }}
               value={fuelPrice}
               onChangeText={setFuelPrice}
               keyboardType="decimal-pad"
-              classNames={{ input: "text-white", label: "text-slate-300 font-medium", inputWrapper: "border-slate-600 bg-slate-900/50" }}
+              classNames={{ input: "text-white", label: "text-neutral-400 font-medium", inputWrapper: "border-neutral-700 bg-black/50" }}
             />
-            <View className="mt-4 pt-4 border-t border-slate-700/50">
+            <View className="mt-4 pt-4 border-t border-neutral-800">
               <Button 
-                className="w-full bg-cyan-500 rounded-2xl shadow-[0_0_15px_rgba(6,182,212,0.4)]" 
+                className="w-full bg-yellow-400 rounded-2xl" 
                 size="lg" 
                 isLoading={isCreating}
                 onPress={handleCreateTrip}
               >
-                <Text className="text-slate-950 font-bold text-base">Start Trip</Text>
+                <Text className="text-black font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>Start Trip</Text>
               </Button>
             </View>
           </Animated.View>
         </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }

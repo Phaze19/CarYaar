@@ -25,18 +25,18 @@ export default function BalancesScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-slate-900">
-      <ScrollView contentContainerStyle={{ padding: 24 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#000000' }} edges={['top']}>
+      <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 100 }} className="bg-black">
         
         <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-8 mt-2">
-          <Text className="text-slate-300 font-medium text-sm mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Advanced Settlement</Text>
+          <Text className="text-neutral-400 font-medium text-sm mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Advanced Settlement</Text>
           <Text className="text-3xl font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>Net Balances</Text>
         </Animated.View>
 
         <Animated.View entering={FadeInUp.duration(800).delay(100).springify()} className="gap-4">
           {balances.length === 0 ? (
-            <View className="p-8 border border-slate-700/50 border-dashed rounded-3xl items-center justify-center bg-slate-800/80 mt-4">
-              <Text className="text-slate-300 font-medium text-center leading-relaxed" style={{ fontFamily: 'Poppins_500Medium' }}>
+            <View className="p-8 border border-neutral-800 border-dashed rounded-3xl items-center justify-center bg-neutral-900/80 mt-4">
+              <Text className="text-neutral-400 font-medium text-center leading-relaxed" style={{ fontFamily: 'Poppins_500Medium' }}>
                 You are all settled up! No pending debts with friends.
               </Text>
             </View>
@@ -48,17 +48,17 @@ export default function BalancesScreen() {
               return (
                 <Animated.View 
                   key={balance.otherUserId} 
-                  entering={FadeInUp.duration(600).delay(200 + index * 50).springify()}
-                  className="bg-slate-800/80 border border-slate-700/50 p-5 rounded-3xl space-y-4"
+                  entering={FadeInDown.delay(150 + index * 100).springify()}
+                  className="bg-neutral-900/80 border border-neutral-800 p-5 rounded-3xl mb-4 gap-4"
                 >
                   <View className="flex-row justify-between items-center">
                     <View className="flex-row items-center gap-3">
-                      <View className="w-10 h-10 rounded-xl bg-slate-700/50 border border-slate-600 items-center justify-center">
-                        <Text className="font-bold text-slate-300" style={{ fontFamily: 'Poppins_700Bold' }}>{balance.otherUserName.charAt(0)}</Text>
+                      <View className="w-10 h-10 rounded-xl bg-neutral-800 items-center justify-center">
+                        <Text className="font-bold text-neutral-300" style={{ fontFamily: 'Poppins_700Bold' }}>{balance.otherUserName.charAt(0)}</Text>
                       </View>
                       <View>
                         <Text className="text-lg font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_600SemiBold' }}>{balance.otherUserName}</Text>
-                        <Text className={`text-sm font-semibold ${owesYou ? 'text-cyan-400' : 'text-orange-400'}`} style={{ fontFamily: 'Poppins_600SemiBold' }}>
+                        <Text className={`text-sm font-semibold ${owesYou ? 'text-yellow-400' : 'text-red-500'}`} style={{ fontFamily: 'Poppins_600SemiBold' }}>
                           {owesYou ? `Owes you ₹${absAmount}` : `You owe ₹${absAmount}`}
                         </Text>
                       </View>
@@ -66,12 +66,12 @@ export default function BalancesScreen() {
                   </View>
                   
                   <Button 
-                    className={`w-full rounded-2xl ${owesYou ? 'bg-slate-900 border border-slate-700' : 'bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.4)]'}`}
+                    className={`w-full rounded-2xl ${owesYou ? 'bg-black border border-neutral-800' : 'bg-yellow-400'}`}
                     size="md"
                     isLoading={settlingId === balance.otherUserId}
                     onPress={() => handleSettle(balance.otherUserId)}
                   >
-                    <Text className={owesYou ? 'text-slate-300 font-semibold' : 'text-slate-950 font-bold'} style={{ fontFamily: 'Poppins_600SemiBold' }}>
+                    <Text className={owesYou ? 'text-neutral-400 font-semibold' : 'text-black font-bold'} style={{ fontFamily: 'Poppins_600SemiBold' }}>
                       {owesYou ? 'Mark as Paid' : 'Settle Up & Pay'}
                     </Text>
                   </Button>

@@ -19,9 +19,9 @@ export default function TripDetailScreen() {
 
   if (!currentTrip || currentTrip.id !== id) {
     return (
-      <View className="flex-1 justify-center items-center bg-slate-50">
-        <Text className="text-slate-500 mb-4 font-medium">Trip not found.</Text>
-        <Button className="rounded-xl bg-slate-900" onPress={() => router.back()}>
+      <View className="flex-1 justify-center items-center bg-black">
+        <Text className="text-neutral-500 mb-4 font-medium">Trip not found.</Text>
+        <Button className="rounded-xl bg-neutral-900 border border-neutral-800" onPress={() => router.back()}>
           <Text className="text-white font-semibold">Return Home</Text>
         </Button>
       </View>
@@ -84,66 +84,66 @@ export default function TripDetailScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']} className="bg-slate-900">
-      <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 60 }} className="flex-1">
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#000000' }} edges={['top']}>
+      <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 60 }} className="bg-black">
         
-        <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-6">
-          <Button size="sm" variant="bordered" className="self-start mb-6 rounded-lg border-slate-700 bg-slate-800" onPress={() => router.back()}>
-            <Text className="text-slate-300 font-medium px-2" style={{ fontFamily: 'Poppins_500Medium' }}>Back</Text>
+        <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-6 mt-2">
+          <Button size="sm" variant="bordered" className="self-start mb-6 rounded-lg border-neutral-800 bg-neutral-900" onPress={() => router.back()}>
+            <Text className="text-neutral-300 font-medium px-2" style={{ fontFamily: 'Poppins_500Medium' }}>Back</Text>
           </Button>
 
-          <Text className="text-sm font-medium text-slate-300 mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Route Details</Text>
+          <Text className="text-sm font-medium text-neutral-400 mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Route Details</Text>
           <Text className="text-3xl font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>Trip Manifest</Text>
         </Animated.View>
 
-        <Animated.View entering={FadeIn.duration(800).delay(100)} className="w-full bg-slate-800/80 rounded-3xl p-6 shadow-sm border border-slate-700/50 mb-8">
-          <View className="flex-row justify-between mb-4 pb-4 border-b border-slate-700/50">
-            <Text className="text-slate-300 font-medium text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Distance</Text>
+        <Animated.View entering={FadeIn.duration(800).delay(100)} className="w-full bg-neutral-900/80 rounded-3xl p-6 border border-neutral-800 mb-8">
+          <View className="flex-row justify-between mb-4 pb-4 border-b border-neutral-800">
+            <Text className="text-neutral-400 font-medium text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Distance</Text>
             <Text className="font-semibold text-white text-lg" style={{ fontFamily: 'Poppins_600SemiBold' }}>{currentTrip.distance_km} km</Text>
           </View>
-          <View className="flex-row justify-between mb-4 pb-4 border-b border-slate-700/50">
-            <Text className="text-slate-300 font-medium text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Total Cost</Text>
+          <View className="flex-row justify-between mb-4 pb-4 border-b border-neutral-800">
+            <Text className="text-neutral-400 font-medium text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Total Cost</Text>
             <Text className="font-semibold text-white text-lg" style={{ fontFamily: 'Poppins_600SemiBold' }}>₹{currentTrip.total_cost.toFixed(2)}</Text>
           </View>
           <View className="flex-row justify-between items-baseline mt-2">
-            <Text className="text-slate-300 font-medium text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Split per Rider</Text>
-            <Text className="font-bold text-3xl text-cyan-400 tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>₹{costPerRider.toFixed(2)}</Text>
+            <Text className="text-neutral-400 font-medium text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Split per Rider</Text>
+            <Text className="font-bold text-3xl text-yellow-400 tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>₹{costPerRider.toFixed(2)}</Text>
           </View>
         </Animated.View>
 
         <Animated.View entering={FadeIn.duration(800).delay(200)}>
           <View className="flex-row justify-between items-end mb-4">
             <Text className="text-xl font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>Passengers</Text>
-            <View className="bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-md">
-              <Text className="text-xs text-slate-300 font-semibold">{numberOfRiders} Checked In</Text>
+            <View className="bg-neutral-900 border border-neutral-800 px-2.5 py-1 rounded-md">
+              <Text className="text-xs text-neutral-300 font-semibold">{numberOfRiders} Checked In</Text>
             </View>
           </View>
           
           <View className="gap-3 mb-10">
             {riders.length === 0 ? (
-              <View className="p-8 border border-slate-700/50 border-dashed rounded-3xl items-center justify-center bg-slate-800/50">
-                <Text className="text-slate-400 font-medium text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Waiting for passengers...</Text>
+              <View className="p-8 border border-neutral-800 border-dashed rounded-3xl items-center justify-center bg-neutral-900/80">
+                <Text className="text-neutral-400 font-medium text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Waiting for passengers...</Text>
               </View>
             ) : (
               riders.map(rider => (
-                <View key={rider.id} className="flex-row justify-between items-center bg-slate-800/80 border border-slate-700/50 p-4 rounded-3xl">
+                <View key={rider.id} className="flex-row justify-between items-center bg-neutral-900/80 border border-neutral-800 p-4 rounded-3xl">
                   <View className="flex-row items-center gap-3">
-                    <View className="w-10 h-10 rounded-xl bg-slate-700/50 border border-slate-600 items-center justify-center">
-                      <Text className="font-bold text-slate-300" style={{ fontFamily: 'Poppins_700Bold' }}>R</Text>
+                    <View className="w-10 h-10 rounded-xl bg-neutral-800 items-center justify-center">
+                      <Text className="font-bold text-neutral-300" style={{ fontFamily: 'Poppins_700Bold' }}>R</Text>
                     </View>
                     <View>
                       <Text className="font-semibold text-white" style={{ fontFamily: 'Poppins_600SemiBold' }}>Passenger</Text>
-                      <Text className="text-sm font-medium text-slate-400" style={{ fontFamily: 'Poppins_500Medium' }}>Share: ₹{costPerRider.toFixed(2)}</Text>
+                      <Text className="text-sm font-medium text-neutral-400" style={{ fontFamily: 'Poppins_500Medium' }}>Share: ₹{costPerRider.toFixed(2)}</Text>
                     </View>
                   </View>
                   <View>
                     {rider.payment_status === 'paid' ? (
-                      <View className="bg-cyan-500/20 border border-cyan-500/30 px-2 py-1 rounded-md">
-                        <Text className="text-cyan-400 font-semibold text-xs">Paid</Text>
+                      <View className="bg-yellow-400/20 border border-yellow-400/30 px-2 py-1 rounded-md">
+                        <Text className="text-yellow-400 font-semibold text-xs">Paid</Text>
                       </View>
                     ) : (
-                      <View className="bg-orange-500/20 border border-orange-500/30 px-2 py-1 rounded-md">
-                        <Text className="text-orange-400 font-semibold text-xs">Pending</Text>
+                      <View className="bg-red-500/20 border border-red-500/30 px-2 py-1 rounded-md">
+                        <Text className="text-red-400 font-semibold text-xs">Pending</Text>
                       </View>
                     )}
                   </View>
@@ -154,20 +154,20 @@ export default function TripDetailScreen() {
 
           {/* Action Buttons */}
           {!isDriver && !isCheckedIn && (
-            <Button className="w-full bg-cyan-500 rounded-2xl mb-4 shadow-[0_0_15px_rgba(6,182,212,0.4)]" size="lg" isLoading={isCheckingIn} onPress={handleCheckIn}>
-              <Text className="text-slate-950 font-bold text-base">Check In</Text>
+            <Button className="w-full bg-yellow-400 rounded-2xl mb-4" size="lg" isLoading={isCheckingIn} onPress={handleCheckIn}>
+              <Text className="text-black font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>Check In</Text>
             </Button>
           )}
 
           {!isDriver && isCheckedIn && myRiderRecord?.payment_status === 'pending' && (
-            <Button className="w-full bg-slate-800 border border-cyan-500/50 rounded-2xl shadow-sm mb-4" size="lg" onPress={handlePay}>
-              <Text className="text-cyan-400 font-bold text-base">Settle ₹{costPerRider.toFixed(2)} via UPI</Text>
+            <Button className="w-full bg-black border border-yellow-400 rounded-2xl mb-4" size="lg" onPress={handlePay}>
+              <Text className="text-yellow-400 font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>Settle ₹{costPerRider.toFixed(2)} via UPI</Text>
             </Button>
           )}
 
           {isDriver && (
-            <Button className="w-full rounded-2xl bg-slate-900 border border-red-500/50 mt-4" size="lg" isLoading={isEnding} onPress={handleEndTrip}>
-              <Text className="text-red-400 font-semibold text-base">Complete Trip</Text>
+            <Button className="w-full rounded-2xl bg-black border border-red-500/50 mt-4" size="lg" isLoading={isEnding} onPress={handleEndTrip}>
+              <Text className="text-red-500 font-semibold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>Complete Trip</Text>
             </Button>
           )}
         </Animated.View>
