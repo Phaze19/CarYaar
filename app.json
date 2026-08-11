@@ -44,7 +44,9 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-status-bar"
+      "expo-status-bar",
+      "@react-native-google-signin/google-signin",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,

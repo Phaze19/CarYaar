@@ -42,7 +42,7 @@ TaskManager.defineTask(GEOFENCE_TASK, async ({ data: { eventType, region }, erro
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout(): JSX.Element | null {
-  const { user, checkSession } = useAuthStore();
+  const { user, needsOnboarding, checkSession } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
 
@@ -65,15 +65,20 @@ export default function RootLayout(): JSX.Element | null {
 
   useEffect(() => {
     const inAuthGroup = segments[0] === '(auth)';
+    const isLogin = segments[1] === 'login';
+    const isOnboarding = segments[1] === 'onboarding';
 
-    if (!user && !inAuthGroup) {
-      // Redirect to the login page.
+    if (!user && !needsOnboarding && (!inAuthGroup || isOnboarding)) {
+      // Not logged in at all, go to login
       router.replace('/(auth)/login');
-    } else if (user && inAuthGroup) {
-      // Redirect away from the login page.
+    } else if (needsOnboarding && (!inAuthGroup || isLogin)) {
+      // Authenticated but needs onboarding
+      router.replace('/(auth)/onboarding');
+    } else if (user && !needsOnboarding && inAuthGroup) {
+      // Fully authenticated and on auth screen, go to main app
       router.replace('/(tabs)');
     }
-  }, [user, segments]);
+  }, [user, needsOnboarding, segments]);
 
   if (!fontsLoaded) return null;
 
@@ -82,6 +87,7 @@ export default function RootLayout(): JSX.Element | null {
       <HeroUINativeProvider>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(auth)/login" options={{ animation: 'fade' }} />
+          <Stack.Screen name="(auth)/onboarding" options={{ animation: 'fade' }} />
           <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
         </Stack>
         <StatusBar style="auto" />
