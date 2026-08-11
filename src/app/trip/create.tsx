@@ -80,10 +80,10 @@ export default function CreateTripScreen() {
         // 3. Start Background Geofencing
         try {
            await Location.startGeofencingAsync(GEOFENCE_TASK, [{
-             identifier: created.id, // We use the Trip ID so the background task knows what to end
+             identifier: created.id,
              latitude: destCoords.latitude,
              longitude: destCoords.longitude,
-             radius: 150, // 150 meters
+             radius: 150,
            }]);
         } catch (e) {
            console.log("Failed to start geofence:", e);
@@ -106,57 +106,63 @@ export default function CreateTripScreen() {
   return (
     <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1, backgroundColor: '#000000' }}
+      style={{ flex: 1, backgroundColor: '#ffffff' }}
     >
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#000000' }} edges={['top']}>
-        <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 100 }} className="bg-black">
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }} edges={['top']}>
+        <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 100 }} className="bg-white">
           
           <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-8 mt-2">
-            <Button size="md" className="bg-transparent" onPress={() => router.back()}>
-              <Text className="text-neutral-300 font-medium px-2" style={{ fontFamily: 'Poppins_500Medium' }}>Cancel</Text>
+            <Button size="md" className="bg-transparent self-start mb-6" onPress={() => router.back()}>
+              <Text className="text-black font-bold px-2" style={{ fontFamily: 'Poppins_700Bold' }}>{'< Back'}</Text>
             </Button>
-            <Text className="text-neutral-400 font-medium text-sm mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Driver Mode</Text>
-            <Text className="text-3xl font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>Create Trip</Text>
+            <Text className="text-black font-bold text-sm mb-1 uppercase" style={{ fontFamily: 'Poppins_700Bold' }}>Driver Mode</Text>
+            <Text className="text-5xl font-bold text-black tracking-tight" style={{ fontFamily: 'RacingSansOne_400Regular' }}>CREATE TRIP</Text>
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-neutral-900/80 p-6 rounded-3xl border border-neutral-800 space-y-4 gap-5">
-            <Input 
-              label="Destination (Optional)" 
-              placeholder="e.g. Airport, Office" 
-              placeholderTextColor="#737373"
-              style={{ color: 'white' }}
-              value={destination}
-              onChangeText={setDestination}
-              classNames={{ input: "text-white", label: "text-neutral-400 font-medium", inputWrapper: "border-neutral-700 bg-black/50" }}
-            />
-            <Input 
-              label="Total Trip Distance (km)" 
-              placeholder="0.0" 
-              placeholderTextColor="#737373"
-              style={{ color: 'white' }}
-              value={distance}
-              onChangeText={setDistance}
-              keyboardType="decimal-pad"
-              classNames={{ input: "text-white", label: "text-neutral-400 font-medium", inputWrapper: "border-neutral-700 bg-black/50" }}
-            />
-            <Input 
-              label="Current Fuel Price (₹/L)" 
-              placeholder="100" 
-              placeholderTextColor="#737373"
-              style={{ color: 'white' }}
-              value={fuelPrice}
-              onChangeText={setFuelPrice}
-              keyboardType="decimal-pad"
-              classNames={{ input: "text-white", label: "text-neutral-400 font-medium", inputWrapper: "border-neutral-700 bg-black/50" }}
-            />
-            <View className="mt-4 pt-4 border-t border-neutral-800">
+          <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-white p-6 rounded-3xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(239,68,68,1)] space-y-4 gap-5">
+            <View>
+              <Text className="text-black font-bold text-lg mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Destination (Optional)</Text>
+              <Input 
+                placeholder="e.g. Airport, Office" 
+                placeholderTextColor="#737373"
+                style={{ color: 'black', fontFamily: 'Poppins_600SemiBold' }}
+                value={destination}
+                onChangeText={setDestination}
+                className="border-2 border-black bg-white rounded-xl h-14 text-black"
+              />
+            </View>
+            <View>
+              <Text className="text-black font-bold text-lg mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Total Trip Distance (km)</Text>
+              <Input 
+                placeholder="0.0" 
+                placeholderTextColor="#737373"
+                style={{ color: 'black', fontFamily: 'Poppins_600SemiBold' }}
+                value={distance}
+                onChangeText={setDistance}
+                keyboardType="decimal-pad"
+                className="border-2 border-black bg-white rounded-xl h-14 text-black"
+              />
+            </View>
+            <View>
+              <Text className="text-black font-bold text-lg mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Current Fuel Price (₹/L)</Text>
+              <Input 
+                placeholder="100" 
+                placeholderTextColor="#737373"
+                style={{ color: 'black', fontFamily: 'Poppins_600SemiBold' }}
+                value={fuelPrice}
+                onChangeText={setFuelPrice}
+                keyboardType="decimal-pad"
+                className="border-2 border-black bg-white rounded-xl h-14 text-black"
+              />
+            </View>
+            <View className="mt-4 pt-4 border-t-2 border-black">
               <Button 
-                className="w-full bg-yellow-400 rounded-2xl" 
+                className="w-full bg-yellow-400 rounded-2xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] h-16" 
                 size="lg" 
-                disabled={isCreating}
+                isDisabled={isCreating}
                 onPress={handleCreateTrip}
               >
-                <Text className="text-black font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>Start Trip</Text>
+                <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Start Trip</Text>
               </Button>
             </View>
           </Animated.View>

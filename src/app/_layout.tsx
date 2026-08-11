@@ -6,6 +6,7 @@ import { HeroUINativeProvider } from "heroui-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useAuthStore } from "../store/useAuthStore";
 import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
+import { RacingSansOne_400Regular } from '@expo-google-fonts/racing-sans-one';
 import * as SplashScreen from 'expo-splash-screen';
 
 import "../global.css";
@@ -51,6 +52,7 @@ export default function RootLayout(): JSX.Element | null {
     Poppins_500Medium,
     Poppins_600SemiBold,
     Poppins_700Bold,
+    RacingSansOne_400Regular,
   });
 
   useEffect(() => {

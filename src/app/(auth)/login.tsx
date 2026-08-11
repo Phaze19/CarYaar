@@ -7,7 +7,6 @@ import { supabase } from '../../lib/supabase';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 
-// Ensure the auth session handles web redirects properly
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
@@ -15,14 +14,11 @@ export default function LoginScreen() {
 
   const handleOAuth = async (provider: 'google' | 'apple') => {
     setIsLoading(true);
-    
-    // Fallback error if the user hasn't set up the provider in Supabase yet.
     try {
-      // 1. Get the OAuth URL from Supabase
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: Linking.createURL('/'), // Universal link back to app
+          redirectTo: Linking.createURL('/'),
           skipBrowserRedirect: true,
         },
       });
@@ -30,15 +26,9 @@ export default function LoginScreen() {
       if (error) throw error;
 
       if (data?.url) {
-        // 2. Open the URL in a secure in-app browser
         const result = await WebBrowser.openAuthSessionAsync(data.url, Linking.createURL('/'));
-        
-        // 3. Handle the redirect back from the browser
         if (result.type === 'success') {
-          const { url } = result;
-          // Supabase's onAuthStateChange handles the session token automatically 
-          // because it detects the URL changes on the app root if set up correctly.
-          // Otherwise, we can parse it here in production.
+          // Handled by onAuthStateChange
         }
       }
     } catch (err: any) {
@@ -57,41 +47,42 @@ export default function LoginScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <View style={{ flex: 1, backgroundColor: '#000000' }}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-black">
+      <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
+        {/* Subtle grid background pattern can go here if needed, keeping it white for now */}
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-white">
           <View className="flex-1 px-8 py-16 justify-center">
             
-            <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-12 items-center">
-              <View className="w-24 h-24 bg-yellow-400/20 rounded-3xl items-center justify-center mb-8 border border-yellow-400/30">
-                <Text className="text-yellow-400 text-4xl font-bold tracking-tighter" style={{ fontFamily: 'Poppins_700Bold' }}>CY</Text>
+            <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-16 items-center">
+              <View className="w-32 h-32 bg-yellow-400 rounded-3xl items-center justify-center mb-6 border-4 border-black shadow-[6px_6px_0px_0px_rgba(239,68,68,1)]">
+                <Text className="text-black text-6xl tracking-tighter" style={{ fontFamily: 'RacingSansOne_400Regular' }}>CY</Text>
               </View>
-              <Text className="text-4xl font-bold text-white tracking-tight mb-3 text-center" style={{ fontFamily: 'Poppins_700Bold' }}>CarYaar</Text>
-              <Text className="text-base text-neutral-400 text-center" style={{ fontFamily: 'Poppins_400Regular' }}>Secure, real-time carpooling.</Text>
+              <Text className="text-5xl text-black tracking-tight mb-2 text-center" style={{ fontFamily: 'RacingSansOne_400Regular' }}>CarYaar</Text>
+              <Text className="text-lg text-black font-bold text-center" style={{ fontFamily: 'Poppins_600SemiBold' }}>Secure, real-time carpooling.</Text>
             </Animated.View>
 
-            <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="space-y-4 gap-4">
+            <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="space-y-4 gap-5">
               
               <Button 
                 size="lg"
                 onPress={() => handleOAuth('google')}
-                className="w-full bg-neutral-900 border border-neutral-700 rounded-2xl flex-row items-center justify-center" 
-                disabled={isLoading}
+                className="w-full bg-yellow-400 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl flex-row items-center justify-center h-16" 
+                isDisabled={isLoading}
               >
-                <Feather name="mail" size={20} color="white" style={{ marginRight: 8 }} />
-                <Text className="text-white font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>Continue with Google</Text>
+                <Feather name="mail" size={24} color="black" style={{ marginRight: 12 }} />
+                <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Continue with Google</Text>
               </Button>
 
               <Button 
                 size="lg"
                 onPress={() => handleOAuth('apple')}
-                className="w-full bg-neutral-900 border border-neutral-700 rounded-2xl flex-row items-center justify-center" 
-                disabled={isLoading}
+                className="w-full bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl flex-row items-center justify-center h-16" 
+                isDisabled={isLoading}
               >
-                <Feather name="aperture" size={20} color="white" style={{ marginRight: 8 }} />
-                <Text className="text-white font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>Continue with Apple</Text>
+                <Feather name="aperture" size={24} color="black" style={{ marginRight: 12 }} />
+                <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Continue with Apple</Text>
               </Button>
               
-              <Text className="text-neutral-500 text-xs text-center mt-6" style={{ fontFamily: 'Poppins_400Regular' }}>
+              <Text className="text-black text-xs text-center mt-6 font-bold" style={{ fontFamily: 'Poppins_600SemiBold' }}>
                 By continuing, you agree to our Terms of Service and Privacy Policy.
               </Text>
             </Animated.View>
