@@ -29,14 +29,14 @@ export default function BalancesScreen() {
       <ScrollView contentContainerStyle={{ padding: 24 }}>
         
         <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-8 mt-2">
-          <Text className="text-slate-400 font-medium text-sm mb-1">Advanced Settlement</Text>
-          <Text className="text-3xl font-bold text-white tracking-tight">Net Balances</Text>
+          <Text className="text-slate-300 font-medium text-sm mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Advanced Settlement</Text>
+          <Text className="text-3xl font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>Net Balances</Text>
         </Animated.View>
 
         <Animated.View entering={FadeInUp.duration(800).delay(100).springify()} className="gap-4">
           {balances.length === 0 ? (
             <View className="p-8 border border-slate-700/50 border-dashed rounded-3xl items-center justify-center bg-slate-800/80 mt-4">
-              <Text className="text-slate-400 font-medium text-center leading-relaxed">
+              <Text className="text-slate-300 font-medium text-center leading-relaxed" style={{ fontFamily: 'Poppins_500Medium' }}>
                 You are all settled up! No pending debts with friends.
               </Text>
             </View>
@@ -54,11 +54,11 @@ export default function BalancesScreen() {
                   <View className="flex-row justify-between items-center">
                     <View className="flex-row items-center gap-3">
                       <View className="w-10 h-10 rounded-xl bg-slate-700/50 border border-slate-600 items-center justify-center">
-                        <Text className="font-bold text-slate-300">{balance.otherUserName.charAt(0)}</Text>
+                        <Text className="font-bold text-slate-300" style={{ fontFamily: 'Poppins_700Bold' }}>{balance.otherUserName.charAt(0)}</Text>
                       </View>
                       <View>
-                        <Text className="text-lg font-bold text-white tracking-tight">{balance.otherUserName}</Text>
-                        <Text className={`text-sm font-semibold ${owesYou ? 'text-cyan-400' : 'text-orange-400'}`}>
+                        <Text className="text-lg font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_600SemiBold' }}>{balance.otherUserName}</Text>
+                        <Text className={`text-sm font-semibold ${owesYou ? 'text-cyan-400' : 'text-orange-400'}`} style={{ fontFamily: 'Poppins_600SemiBold' }}>
                           {owesYou ? `Owes you ₹${absAmount}` : `You owe ₹${absAmount}`}
                         </Text>
                       </View>
@@ -71,7 +71,7 @@ export default function BalancesScreen() {
                     isLoading={settlingId === balance.otherUserId}
                     onPress={() => handleSettle(balance.otherUserId)}
                   >
-                    <Text className={owesYou ? 'text-slate-300 font-semibold' : 'text-slate-950 font-bold'}>
+                    <Text className={owesYou ? 'text-slate-300 font-semibold' : 'text-slate-950 font-bold'} style={{ fontFamily: 'Poppins_600SemiBold' }}>
                       {owesYou ? 'Mark as Paid' : 'Settle Up & Pay'}
                     </Text>
                   </Button>

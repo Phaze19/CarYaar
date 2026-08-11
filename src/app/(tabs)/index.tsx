@@ -25,8 +25,8 @@ export default function HomeScreen() {
         {/* Header */}
         <Animated.View entering={FadeInDown.duration(600).springify()} className="flex-row justify-between items-center mb-8 mt-2">
           <View>
-            <Text className="text-slate-400 font-medium text-sm mb-1 font-serif">Welcome back,</Text>
-            <Text className="text-3xl font-bold text-white tracking-tight font-serif">{user.name.split(' ')[0]}</Text>
+            <Text className="text-slate-300 font-medium text-sm mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Welcome back,</Text>
+            <Text className="text-3xl font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>{user.name.split(' ')[0]}</Text>
           </View>
           <View className="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-500/30 items-center justify-center">
             <Text className="text-lg font-bold text-cyan-400">{user.name.charAt(0)}</Text>

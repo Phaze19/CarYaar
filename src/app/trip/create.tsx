@@ -64,10 +64,10 @@ export default function CreateTripScreen() {
           
           <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-8 mt-2">
             <Button size="sm" variant="bordered" className="self-start mb-6 rounded-lg border-slate-700 bg-slate-800" onPress={() => router.back()}>
-              <Text className="text-slate-300 font-medium px-2">Cancel</Text>
+              <Text className="text-slate-300 font-medium px-2" style={{ fontFamily: 'Poppins_500Medium' }}>Cancel</Text>
             </Button>
-            <Text className="text-slate-400 font-medium text-sm mb-1">Driver Mode</Text>
-            <Text className="text-3xl font-bold text-white tracking-tight">Create Trip</Text>
+            <Text className="text-slate-300 font-medium text-sm mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Driver Mode</Text>
+            <Text className="text-3xl font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>Create Trip</Text>
           </Animated.View>
 
           <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-slate-800/80 p-6 rounded-3xl shadow-sm border border-slate-700/50 space-y-4 gap-5">

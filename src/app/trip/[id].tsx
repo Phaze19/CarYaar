@@ -89,31 +89,31 @@ export default function TripDetailScreen() {
         
         <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-6">
           <Button size="sm" variant="bordered" className="self-start mb-6 rounded-lg border-slate-700 bg-slate-800" onPress={() => router.back()}>
-            <Text className="text-slate-300 font-medium px-2">Back</Text>
+            <Text className="text-slate-300 font-medium px-2" style={{ fontFamily: 'Poppins_500Medium' }}>Back</Text>
           </Button>
 
-          <Text className="text-sm font-medium text-slate-400 mb-1">Route Details</Text>
-          <Text className="text-3xl font-bold text-white tracking-tight">Trip Manifest</Text>
+          <Text className="text-sm font-medium text-slate-300 mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Route Details</Text>
+          <Text className="text-3xl font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>Trip Manifest</Text>
         </Animated.View>
 
         <Animated.View entering={FadeIn.duration(800).delay(100)} className="w-full bg-slate-800/80 rounded-3xl p-6 shadow-sm border border-slate-700/50 mb-8">
           <View className="flex-row justify-between mb-4 pb-4 border-b border-slate-700/50">
-            <Text className="text-slate-400 font-medium text-sm">Distance</Text>
-            <Text className="font-semibold text-white text-lg">{currentTrip.distance_km} km</Text>
+            <Text className="text-slate-300 font-medium text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Distance</Text>
+            <Text className="font-semibold text-white text-lg" style={{ fontFamily: 'Poppins_600SemiBold' }}>{currentTrip.distance_km} km</Text>
           </View>
           <View className="flex-row justify-between mb-4 pb-4 border-b border-slate-700/50">
-            <Text className="text-slate-400 font-medium text-sm">Total Cost</Text>
-            <Text className="font-semibold text-white text-lg">₹{currentTrip.total_cost.toFixed(2)}</Text>
+            <Text className="text-slate-300 font-medium text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Total Cost</Text>
+            <Text className="font-semibold text-white text-lg" style={{ fontFamily: 'Poppins_600SemiBold' }}>₹{currentTrip.total_cost.toFixed(2)}</Text>
           </View>
           <View className="flex-row justify-between items-baseline mt-2">
-            <Text className="text-slate-400 font-medium text-sm">Split per Rider</Text>
-            <Text className="font-bold text-3xl text-cyan-400 tracking-tight">₹{costPerRider.toFixed(2)}</Text>
+            <Text className="text-slate-300 font-medium text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Split per Rider</Text>
+            <Text className="font-bold text-3xl text-cyan-400 tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>₹{costPerRider.toFixed(2)}</Text>
           </View>
         </Animated.View>
 
         <Animated.View entering={FadeIn.duration(800).delay(200)}>
           <View className="flex-row justify-between items-end mb-4">
-            <Text className="text-xl font-bold text-white tracking-tight">Passengers</Text>
+            <Text className="text-xl font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>Passengers</Text>
             <View className="bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-md">
               <Text className="text-xs text-slate-300 font-semibold">{numberOfRiders} Checked In</Text>
             </View>
@@ -122,18 +122,18 @@ export default function TripDetailScreen() {
           <View className="gap-3 mb-10">
             {riders.length === 0 ? (
               <View className="p-8 border border-slate-700/50 border-dashed rounded-3xl items-center justify-center bg-slate-800/50">
-                <Text className="text-slate-400 font-medium text-sm">Waiting for passengers...</Text>
+                <Text className="text-slate-400 font-medium text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Waiting for passengers...</Text>
               </View>
             ) : (
               riders.map(rider => (
                 <View key={rider.id} className="flex-row justify-between items-center bg-slate-800/80 border border-slate-700/50 p-4 rounded-3xl">
                   <View className="flex-row items-center gap-3">
                     <View className="w-10 h-10 rounded-xl bg-slate-700/50 border border-slate-600 items-center justify-center">
-                      <Text className="font-bold text-slate-300">R</Text>
+                      <Text className="font-bold text-slate-300" style={{ fontFamily: 'Poppins_700Bold' }}>R</Text>
                     </View>
                     <View>
-                      <Text className="font-semibold text-white">Passenger</Text>
-                      <Text className="text-sm font-medium text-slate-400">Share: ₹{costPerRider.toFixed(2)}</Text>
+                      <Text className="font-semibold text-white" style={{ fontFamily: 'Poppins_600SemiBold' }}>Passenger</Text>
+                      <Text className="text-sm font-medium text-slate-400" style={{ fontFamily: 'Poppins_500Medium' }}>Share: ₹{costPerRider.toFixed(2)}</Text>
                     </View>
                   </View>
                   <View>

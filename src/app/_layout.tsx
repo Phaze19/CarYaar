@@ -5,13 +5,30 @@ import { StatusBar } from "expo-status-bar";
 import { HeroUINativeProvider } from "heroui-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useAuthStore } from "../store/useAuthStore";
+import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
+import * as SplashScreen from 'expo-splash-screen';
 
 import "../global.css";
 
-export default function RootLayout(): JSX.Element {
+SplashScreen.preventAutoHideAsync();
+
+export default function RootLayout(): JSX.Element | null {
   const { user, checkSession } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
+
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+    Poppins_700Bold,
+  });
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
 
   useEffect(() => {
     checkSession();
@@ -28,6 +45,8 @@ export default function RootLayout(): JSX.Element {
       router.replace('/(tabs)');
     }
   }, [user, segments]);
+
+  if (!fontsLoaded) return null;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

@@ -31,19 +31,19 @@ export default function ProfileScreen() {
           
           <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-8 mt-2 flex-row justify-between items-start">
             <View>
-              <Text className="text-slate-400 font-medium text-sm mb-1">Account</Text>
-              <Text className="text-3xl font-bold text-white tracking-tight">Profile</Text>
+              <Text className="text-slate-300 font-medium text-sm mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Account</Text>
+              <Text className="text-3xl font-bold text-white tracking-tight" style={{ fontFamily: 'Poppins_700Bold' }}>Profile</Text>
             </View>
           </Animated.View>
 
           <Animated.View entering={FadeInUp.duration(800).delay(100).springify()} className="mb-8 bg-slate-800/80 p-5 rounded-3xl shadow-sm border border-slate-700/50">
             <View className="flex-row items-center gap-4">
               <View className="w-16 h-16 bg-cyan-500/20 border border-cyan-500/30 rounded-2xl items-center justify-center">
-                <Text className="text-2xl font-bold text-cyan-400">{user.name.charAt(0)}</Text>
+                <Text className="text-2xl font-bold text-cyan-400" style={{ fontFamily: 'Poppins_700Bold' }}>{user.name.charAt(0)}</Text>
               </View>
               <View>
-                <Text className="text-xl font-bold text-white tracking-tight mb-0.5">{user.name}</Text>
-                <Text className="text-sm text-slate-400 font-medium">{user.phone}</Text>
+                <Text className="text-xl font-bold text-white tracking-tight mb-0.5" style={{ fontFamily: 'Poppins_700Bold' }}>{user.name}</Text>
+                <Text className="text-sm text-slate-300 font-medium" style={{ fontFamily: 'Poppins_500Medium' }}>{user.phone}</Text>
               </View>
             </View>
           </Animated.View>
@@ -85,29 +85,29 @@ export default function ProfileScreen() {
           </Animated.View>
 
           <Animated.View entering={FadeInUp.duration(800).delay(300).springify()}>
-            <Text className="text-xl font-bold text-white tracking-tight mb-4">Settings</Text>
+            <Text className="text-xl font-bold text-white tracking-tight mb-4" style={{ fontFamily: 'Poppins_700Bold' }}>Settings</Text>
             
             <View className="bg-slate-800/80 rounded-3xl border border-slate-700/50 overflow-hidden mb-6">
               <View className="p-4 flex-row justify-between items-center border-b border-slate-700/50">
                 <View className="flex-row items-center">
                   <Text className="text-xl mr-3">🔔</Text>
-                  <Text className="text-white font-medium">Notifications</Text>
+                  <Text className="text-white font-medium" style={{ fontFamily: 'Poppins_500Medium' }}>Push Notifications</Text>
                 </View>
-                <Text className="text-slate-400 text-sm">Enabled</Text>
+                <Text className="text-cyan-400 text-sm font-semibold" style={{ fontFamily: 'Poppins_600SemiBold' }}>Enabled</Text>
               </View>
               <View className="p-4 flex-row justify-between items-center border-b border-slate-700/50">
                 <View className="flex-row items-center">
-                  <Text className="text-xl mr-3">⛽</Text>
-                  <Text className="text-white font-medium">Vehicle Mileage</Text>
+                  <Text className="text-xl mr-3">📍</Text>
+                  <Text className="text-white font-medium" style={{ fontFamily: 'Poppins_500Medium' }}>Location Services</Text>
                 </View>
-                <Text className="text-slate-400 text-sm">{user.default_fuel_avg} km/l</Text>
+                <Text className="text-cyan-400 text-sm font-semibold" style={{ fontFamily: 'Poppins_600SemiBold' }}>Enabled</Text>
               </View>
               <View className="p-4 flex-row justify-between items-center">
                 <View className="flex-row items-center">
                   <Text className="text-xl mr-3">🎨</Text>
-                  <Text className="text-white font-medium">App Theme</Text>
+                  <Text className="text-white font-medium" style={{ fontFamily: 'Poppins_500Medium' }}>App Theme</Text>
                 </View>
-                <Text className="text-slate-400 text-sm">Dark Neumorphic</Text>
+                <Text className="text-slate-300 text-sm" style={{ fontFamily: 'Poppins_400Regular' }}>Dark Neumorphic</Text>
               </View>
             </View>
 
