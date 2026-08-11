@@ -6,6 +6,9 @@ import { useTripStore } from '../../store/useTripStore';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
+import * as Location from 'expo-location';
+
+const GEOFENCE_TASK = 'GEOFENCE_TRIP_END_TASK';
 
 export default function CreateTripScreen() {
   const { user } = useAuthStore();
@@ -24,6 +27,36 @@ export default function CreateTripScreen() {
     }
     
     setIsCreating(true);
+    
+    // 1. Check Location Permissions for Geofencing
+    const { status: fgStatus } = await Location.requestForegroundPermissionsAsync();
+    const { status: bgStatus } = await Location.requestBackgroundPermissionsAsync();
+    
+    if (bgStatus !== 'granted') {
+       alert("Background location is required to automatically end trips when you reach your destination.");
+       setIsCreating(false);
+       return;
+    }
+
+    // 2. Geocode the destination
+    let destCoords = null;
+    if (destination) {
+      try {
+        const results = await Location.geocodeAsync(destination);
+        if (results && results.length > 0) {
+          destCoords = { latitude: results[0].latitude, longitude: results[0].longitude };
+        } else {
+           alert("Could not find that destination on the map. Please try a more specific address.");
+           setIsCreating(false);
+           return;
+        }
+      } catch (e) {
+        alert("Error finding destination location.");
+        setIsCreating(false);
+        return;
+      }
+    }
+
     const dist = parseFloat(distance) || 0;
     const price = parseFloat(fuelPrice) || 0;
     const avg = user.default_fuel_avg || 15;
@@ -43,7 +76,20 @@ export default function CreateTripScreen() {
     setIsCreating(false);
     
     if (created) {
-      if (destination) {
+      if (destination && destCoords) {
+        // 3. Start Background Geofencing
+        try {
+           await Location.startGeofencingAsync(GEOFENCE_TASK, [{
+             identifier: created.id, // We use the Trip ID so the background task knows what to end
+             latitude: destCoords.latitude,
+             longitude: destCoords.longitude,
+             radius: 150, // 150 meters
+           }]);
+        } catch (e) {
+           console.log("Failed to start geofence:", e);
+        }
+
+        // 4. Open Google Maps
         const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`;
         try {
           await Linking.openURL(url);

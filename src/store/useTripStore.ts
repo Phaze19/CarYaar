@@ -13,7 +13,7 @@ interface TripState {
   createTrip: (trip: Omit<Trip, 'id' | 'created_at'>) => Promise<Trip | null>;
   addRider: (rider: Omit<TripRider, 'id' | 'created_at'>) => Promise<void>;
   updateRiderStatus: (riderId: string, status: 'pending' | 'paid') => Promise<void>;
-  endTrip: () => Promise<void>;
+  endTrip: (forceTripId?: string) => Promise<void>;
   subscribeToRiders: (tripId: string) => void;
   unsubscribeFromRiders: () => void;
   
@@ -75,23 +75,34 @@ export const useTripStore = create<TripState>((set, get) => ({
     if (error) alert(error.message);
   },
 
-  endTrip: async () => {
+  endTrip: async (forceTripId?: string) => {
     const trip = get().currentTrip;
-    const riders = get().riders;
+    const targetTripId = forceTripId || trip?.id;
     
-    if (trip) {
-      const { error } = await supabase.from('trips').update({ status: 'completed' }).eq('id', trip.id);
+    if (targetTripId) {
+      const { error } = await supabase.from('trips').update({ status: 'completed' }).eq('id', targetTripId);
       if (error) {
-        alert(error.message);
+        console.error(error.message);
         throw error;
+      }
+      // Fetch riders if we are in a background task context and don't have them in state
+      let activeRiders = get().riders;
+      let activeTripCost = trip?.total_cost || 0;
+      
+      if (activeRiders.length === 0 && forceTripId) {
+         const { data } = await supabase.from('trip_riders').select('*').eq('trip_id', targetTripId);
+         if (data) activeRiders = data;
+         
+         const { data: tripData } = await supabase.from('trips').select('total_cost').eq('id', targetTripId).single();
+         if (tripData) activeTripCost = tripData.total_cost;
       }
       
       // Phase 6: Send push notifications to all passengers
-      const riderIds = riders.map(r => r.rider_id);
+      const riderIds = activeRiders.map(r => r.rider_id);
       if (riderIds.length > 0) {
         const { data: usersData } = await supabase.from('users').select('push_token').in('id', riderIds);
         if (usersData) {
-          const costPerRider = trip.total_cost / riders.length;
+          const costPerRider = activeTripCost / activeRiders.length;
           const msg = `Trip completed! You owe ₹${costPerRider.toFixed(2)}. Open CarYaar to settle.`;
           
           usersData.forEach(u => {
