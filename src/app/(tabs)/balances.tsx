@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Linking, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 import { useTripStore } from '../../store/useTripStore';
@@ -17,10 +17,32 @@ export default function BalancesScreen() {
     }
   }, [user]);
 
-  const handleSettle = async (otherUserId: string) => {
+  const handleSettle = async (balance: import('../../types').Balance) => {
     if (!user) return;
-    setSettlingId(otherUserId);
-    await settleWithUser(user.id, otherUserId);
+    setSettlingId(balance.otherUserId);
+
+    const owesYou = balance.netAmount > 0;
+    
+    if (!owesYou) {
+      // You owe them, open UPI
+      const amount = Math.abs(balance.netAmount).toFixed(2);
+      // In production, fetch their actual UPI ID. For now, use a placeholder.
+      const theirUpi = "driver@okbank"; 
+      const upiUrl = `upi://pay?pa=${theirUpi}&pn=${encodeURIComponent(balance.otherUserName)}&am=${amount}&cu=INR&tn=CarYaar_Settlement`;
+      
+      try {
+        const supported = await Linking.canOpenURL(upiUrl);
+        if (supported) {
+          await Linking.openURL(upiUrl);
+        } else {
+          Alert.alert("No UPI App", "No UPI payment app (GPay, PhonePe, etc.) found. Simulating payment.");
+        }
+      } catch (e) {
+        Alert.alert("Error", "Could not open UPI app.");
+      }
+    }
+
+    await settleWithUser(user.id, balance.otherUserId);
     setSettlingId(null);
   };
 
@@ -69,7 +91,7 @@ export default function BalancesScreen() {
                     className={`w-full rounded-2xl ${owesYou ? 'bg-black border border-neutral-800' : 'bg-yellow-400'}`}
                     size="md"
                     isLoading={settlingId === balance.otherUserId}
-                    onPress={() => handleSettle(balance.otherUserId)}
+                    onPress={() => handleSettle(balance)}
                   >
                     <Text className={owesYou ? 'text-neutral-400 font-semibold' : 'text-black font-bold'} style={{ fontFamily: 'Poppins_600SemiBold' }}>
                       {owesYou ? 'Mark as Paid' : 'Settle Up & Pay'}
