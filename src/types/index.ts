@@ -14,6 +14,7 @@ export interface Trip {
   fuel_price: number;
   total_cost: number;
   status: 'active' | 'completed';
+  created_at: string;
 }
 
 export interface TripRider {

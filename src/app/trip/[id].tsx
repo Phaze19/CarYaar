@@ -154,7 +154,7 @@ export default function TripDetailScreen() {
 
           {/* Action Buttons */}
           {!isDriver && !isCheckedIn && (
-            <Button className="w-full bg-yellow-400 rounded-2xl mb-4" size="lg" isLoading={isCheckingIn} onPress={handleCheckIn}>
+            <Button className="w-full bg-yellow-400 rounded-2xl mb-4" size="lg" disabled={isCheckingIn} onPress={handleCheckIn}>
               <Text className="text-black font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>Check In</Text>
             </Button>
           )}

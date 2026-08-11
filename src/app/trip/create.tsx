@@ -112,7 +112,7 @@ export default function CreateTripScreen() {
         <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 100 }} className="bg-black">
           
           <Animated.View entering={FadeInDown.duration(600).springify()} className="mb-8 mt-2">
-            <Button size="sm" variant="bordered" className="self-start mb-6 rounded-lg border-neutral-800 bg-neutral-900" onPress={() => router.back()}>
+            <Button size="md" className="bg-transparent" onPress={() => router.back()}>
               <Text className="text-neutral-300 font-medium px-2" style={{ fontFamily: 'Poppins_500Medium' }}>Cancel</Text>
             </Button>
             <Text className="text-neutral-400 font-medium text-sm mb-1" style={{ fontFamily: 'Poppins_500Medium' }}>Driver Mode</Text>
@@ -121,7 +121,6 @@ export default function CreateTripScreen() {
 
           <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-neutral-900/80 p-6 rounded-3xl border border-neutral-800 space-y-4 gap-5">
             <Input 
-              variant="bordered"
               label="Destination (Optional)" 
               placeholder="e.g. Airport, Office" 
               placeholderTextColor="#737373"
@@ -131,8 +130,7 @@ export default function CreateTripScreen() {
               classNames={{ input: "text-white", label: "text-neutral-400 font-medium", inputWrapper: "border-neutral-700 bg-black/50" }}
             />
             <Input 
-              variant="bordered"
-              label="Estimated Distance (km)" 
+              label="Total Trip Distance (km)" 
               placeholder="0.0" 
               placeholderTextColor="#737373"
               style={{ color: 'white' }}
@@ -142,7 +140,6 @@ export default function CreateTripScreen() {
               classNames={{ input: "text-white", label: "text-neutral-400 font-medium", inputWrapper: "border-neutral-700 bg-black/50" }}
             />
             <Input 
-              variant="bordered"
               label="Current Fuel Price (₹/L)" 
               placeholder="100" 
               placeholderTextColor="#737373"
@@ -156,7 +153,7 @@ export default function CreateTripScreen() {
               <Button 
                 className="w-full bg-yellow-400 rounded-2xl" 
                 size="lg" 
-                isLoading={isCreating}
+                disabled={isCreating}
                 onPress={handleCreateTrip}
               >
                 <Text className="text-black font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>Start Trip</Text>

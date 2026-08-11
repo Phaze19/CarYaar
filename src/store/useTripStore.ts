@@ -189,7 +189,7 @@ export const useTripStore = create<TripState>((set, get) => ({
         .eq('payment_status', 'pending');
         
       if (theyOweMe) {
-        theyOweMe.forEach(record => {
+        theyOweMe.forEach((record: any) => {
           if (!balancesMap[record.rider_id]) {
             balancesMap[record.rider_id] = { otherUserId: record.rider_id, otherUserName: record.users?.name || 'Unknown', netAmount: 0 };
           }

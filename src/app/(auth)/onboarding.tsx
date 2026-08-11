@@ -38,7 +38,6 @@ export default function OnboardingScreen() {
 
             <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-neutral-900/80 p-6 rounded-3xl border border-neutral-800 space-y-4 gap-5">
               <Input 
-                variant="bordered"
                 label="Phone Number" 
                 placeholder="1234567890" 
                 placeholderTextColor="#737373"
@@ -49,7 +48,6 @@ export default function OnboardingScreen() {
                 classNames={{ input: "text-white", label: "text-neutral-300 font-medium", inputWrapper: "border-neutral-700 bg-black/50" }}
               />
               <Input 
-                variant="bordered"
                 label="UPI ID (Optional)" 
                 placeholder="name@okbank" 
                 placeholderTextColor="#737373"
@@ -62,18 +60,17 @@ export default function OnboardingScreen() {
               
               <Button 
                 size="lg"
-                isLoading={isLoading} 
                 onPress={handleComplete}
                 className="w-full mt-2 bg-yellow-400 rounded-2xl" 
+                disabled={isLoading}
               >
                 <Text className="text-black font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>{isLoading ? "Saving..." : "Complete Setup"}</Text>
               </Button>
 
               <Button 
                 size="md"
-                variant="light"
                 onPress={logout}
-                className="w-full mt-2" 
+                className="w-full mt-2 bg-transparent" 
               >
                 <Text className="text-neutral-500 font-bold text-sm" style={{ fontFamily: 'Poppins_500Medium' }}>Cancel & Sign Out</Text>
               </Button>

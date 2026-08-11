@@ -58,8 +58,7 @@ export default function ProfileScreen() {
 
           <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-neutral-900/80 p-6 rounded-3xl border border-neutral-800 space-y-4 gap-4 mb-8">
             <Input 
-              variant="bordered"
-              label="UPI ID" 
+              label="Full Name" 
               placeholder="name@okbank" 
               placeholderTextColor="#737373"
               style={{ color: 'white' }}
@@ -83,16 +82,15 @@ export default function ProfileScreen() {
             <View className="mt-2 gap-3">
               <Button 
                 size="lg" 
-                className="w-full bg-yellow-400 rounded-2xl" 
-                isLoading={isSaving}
+                className="w-full mt-4 bg-yellow-400 rounded-2xl" 
+                disabled={isSaving}
                 onPress={handleSave}
               >
                 <Text className="text-black font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>{isSaving ? "Saving..." : "Save Preferences"}</Text>
               </Button>
               <Button 
                 size="lg" 
-                variant="bordered"
-                className="w-full border border-neutral-800 bg-black rounded-2xl" 
+                className="w-full mt-2 bg-neutral-900 border border-neutral-700 rounded-2xl" 
                 onPress={handleLogout}
               >
                 <Text className="text-red-500 font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>Log Out</Text>

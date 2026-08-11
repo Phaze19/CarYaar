@@ -90,7 +90,7 @@ export default function BalancesScreen() {
                   <Button 
                     className={`w-full rounded-2xl ${owesYou ? 'bg-black border border-neutral-800' : 'bg-yellow-400'}`}
                     size="md"
-                    isLoading={settlingId === balance.otherUserId}
+                    disabled={settlingId === balance.otherUserId}
                     onPress={() => handleSettle(balance)}
                   >
                     <Text className={owesYou ? 'text-neutral-400 font-semibold' : 'text-black font-bold'} style={{ fontFamily: 'Poppins_600SemiBold' }}>

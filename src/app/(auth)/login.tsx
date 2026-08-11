@@ -73,10 +73,9 @@ export default function LoginScreen() {
               
               <Button 
                 size="lg"
-                variant="bordered"
-                isLoading={isLoading} 
                 onPress={() => handleOAuth('google')}
                 className="w-full bg-neutral-900 border border-neutral-700 rounded-2xl flex-row items-center justify-center" 
+                disabled={isLoading}
               >
                 <Feather name="mail" size={20} color="white" style={{ marginRight: 8 }} />
                 <Text className="text-white font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>Continue with Google</Text>
@@ -84,10 +83,9 @@ export default function LoginScreen() {
 
               <Button 
                 size="lg"
-                variant="bordered"
-                isLoading={isLoading} 
                 onPress={() => handleOAuth('apple')}
                 className="w-full bg-neutral-900 border border-neutral-700 rounded-2xl flex-row items-center justify-center" 
+                disabled={isLoading}
               >
                 <Feather name="aperture" size={20} color="white" style={{ marginRight: 8 }} />
                 <Text className="text-white font-bold text-base" style={{ fontFamily: 'Poppins_600SemiBold' }}>Continue with Apple</Text>
