@@ -13,9 +13,9 @@ WebBrowser.maybeCompleteAuthSession();
 export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(false);
   
-  // Phone Auth State
-  const [authMode, setAuthMode] = useState<'social' | 'phone_input' | 'otp_input'>('social');
-  const [phone, setPhone] = useState('');
+  // Email Auth State
+  const [authMode, setAuthMode] = useState<'social' | 'email_input' | 'otp_input'>('social');
+  const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
 
   const handleOAuth = async (provider: 'google' | 'apple') => {
@@ -54,14 +54,14 @@ export default function LoginScreen() {
   };
 
   const handleSendOtp = async () => {
-    if (!phone) {
-      Alert.alert("Error", "Please enter a valid phone number with country code (e.g. +91...)");
+    if (!email || !email.includes('@')) {
+      Alert.alert("Error", "Please enter a valid email address");
       return;
     }
     
     setIsLoading(true);
     const { error } = await supabase.auth.signInWithOtp({
-      phone: phone.startsWith('+') ? phone : `+91${phone}`, // Default to +91 if none provided
+      email: email,
     });
 
     setIsLoading(false);
@@ -77,12 +77,11 @@ export default function LoginScreen() {
     if (!otp) return;
     
     setIsLoading(true);
-    const formattedPhone = phone.startsWith('+') ? phone : `+91${phone}`;
     
     const { data, error } = await supabase.auth.verifyOtp({
-      phone: formattedPhone,
+      email: email,
       token: otp,
-      type: 'sms',
+      type: 'email',
     });
 
     setIsLoading(false);
@@ -140,11 +139,11 @@ export default function LoginScreen() {
 
                 <Button 
                   size="lg"
-                  onPress={() => setAuthMode('phone_input')}
+                  onPress={() => setAuthMode('email_input')}
                   className="w-full bg-red-500 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl flex-row items-center justify-center h-16" 
                 >
-                  <Feather name="smartphone" size={24} color="white" style={{ marginRight: 12 }} />
-                  <Text className="text-white text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Login with Phone</Text>
+                  <Feather name="at-sign" size={24} color="white" style={{ marginRight: 12 }} />
+                  <Text className="text-white text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Login with Email</Text>
                 </Button>
 
                 <Text className="text-black text-xs text-center mt-6 font-bold" style={{ fontFamily: 'Poppins_600SemiBold' }}>
@@ -153,17 +152,18 @@ export default function LoginScreen() {
               </Animated.View>
             )}
 
-            {authMode === 'phone_input' && (
+            {authMode === 'email_input' && (
               <Animated.View entering={FadeIn.duration(400)} className="gap-5 bg-white p-6 rounded-3xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
                 <View>
-                  <Text className="text-black font-bold text-xl mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Enter Phone Number</Text>
+                  <Text className="text-black font-bold text-xl mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Enter Email Address</Text>
                   <Input 
-                    placeholder="9876543210" 
+                    placeholder="name@example.com" 
                     placeholderTextColor="#737373"
                     style={{ color: 'black', fontFamily: 'Poppins_600SemiBold' }}
-                    value={phone}
-                    onChangeText={setPhone}
-                    keyboardType="phone-pad"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
                     className="border-2 border-black bg-white rounded-xl h-14 text-black"
                   />
                 </View>
@@ -174,7 +174,7 @@ export default function LoginScreen() {
                   className="w-full bg-yellow-400 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl h-16" 
                   isDisabled={isLoading}
                 >
-                  <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>{isLoading ? "Sending..." : "Send SMS Code"}</Text>
+                  <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>{isLoading ? "Sending..." : "Send Email Code"}</Text>
                 </Button>
 
                 <Button 
@@ -190,8 +190,8 @@ export default function LoginScreen() {
             {authMode === 'otp_input' && (
               <Animated.View entering={FadeIn.duration(400)} className="gap-5 bg-white p-6 rounded-3xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
                 <View>
-                  <Text className="text-black font-bold text-xl mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Enter SMS Code</Text>
-                  <Text className="text-black font-bold text-xs mb-4" style={{ fontFamily: 'Poppins_600SemiBold' }}>Sent to {phone}</Text>
+                  <Text className="text-black font-bold text-xl mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Enter Email Code</Text>
+                  <Text className="text-black font-bold text-xs mb-4" style={{ fontFamily: 'Poppins_600SemiBold' }}>Sent to {email}</Text>
                   <Input 
                     placeholder="123456" 
                     placeholderTextColor="#737373"
@@ -215,7 +215,7 @@ export default function LoginScreen() {
 
                 <Button 
                   size="md"
-                  onPress={() => setAuthMode('phone_input')}
+                  onPress={() => setAuthMode('email_input')}
                   className="w-full bg-transparent mt-2" 
                 >
                   <Text className="text-red-500 font-bold text-base" style={{ fontFamily: 'Poppins_700Bold' }}>Back</Text>
