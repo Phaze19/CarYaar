@@ -80,7 +80,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     
     const { error } = await supabase.from('users').insert(newUser);
     if (error) {
-       alert(error.message);
+       if (error.code === '23505') {
+           alert("This phone number or UPI ID is already registered to another account. Please use different details.");
+       } else {
+           alert(error.message);
+       }
     } else {
        set({ user: newUser, needsOnboarding: false });
     }

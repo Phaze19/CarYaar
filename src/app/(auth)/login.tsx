@@ -6,6 +6,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { supabase } from '../../lib/supabase';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
+import { makeRedirectUri } from 'expo-auth-session';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -15,10 +16,15 @@ export default function LoginScreen() {
   const handleOAuth = async (provider: 'google' | 'apple') => {
     setIsLoading(true);
     try {
+      const redirectUrl = makeRedirectUri({
+        scheme: 'caryaar',
+        path: 'auth/callback',
+      });
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: Linking.createURL('/'),
+          redirectTo: redirectUrl,
           skipBrowserRedirect: true,
         },
       });
@@ -26,7 +32,7 @@ export default function LoginScreen() {
       if (error) throw error;
 
       if (data?.url) {
-        const result = await WebBrowser.openAuthSessionAsync(data.url, Linking.createURL('/'));
+        const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUrl);
         if (result.type === 'success') {
           // Handled by onAuthStateChange
         }
