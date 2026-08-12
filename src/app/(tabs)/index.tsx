@@ -27,7 +27,9 @@ export default function HomeScreen() {
 
   useEffect(() => {
     fetchActiveTrip();
+    // eslint-disable-next-line react-hooks/immutability
     pulse.value = withRepeat(withSequence(withTiming(0.5, { duration: 1000 }), withTiming(1, { duration: 1000 })), -1);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!user) return null;
