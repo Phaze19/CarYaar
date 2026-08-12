@@ -112,7 +112,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   bypassLogin: () => {
     set({
       user: {
-        id: 'dev-bypass-123',
+        id: '00000000-0000-0000-0000-000000000000',
         name: 'Dev Tester',
         phone: '+919999999999',
         upi_id: 'dev@upi',
