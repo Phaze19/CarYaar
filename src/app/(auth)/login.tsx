@@ -13,11 +13,6 @@ WebBrowser.maybeCompleteAuthSession();
 export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(false);
   
-  // Email Auth State
-  const [authMode, setAuthMode] = useState<'social' | 'email_input' | 'otp_input'>('social');
-  const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
-
   const handleOAuth = async (provider: 'google' | 'apple') => {
     setIsLoading(true);
     try {
@@ -53,45 +48,6 @@ export default function LoginScreen() {
     }
   };
 
-  const handleSendOtp = async () => {
-    if (!email || !email.includes('@')) {
-      Alert.alert("Error", "Please enter a valid email address");
-      return;
-    }
-    
-    setIsLoading(true);
-    const { error } = await supabase.auth.signInWithOtp({
-      email: email,
-    });
-
-    setIsLoading(false);
-
-    if (error) {
-      Alert.alert("Error", error.message);
-    } else {
-      setAuthMode('otp_input');
-    }
-  };
-
-  const handleVerifyOtp = async () => {
-    if (!otp) return;
-    
-    setIsLoading(true);
-    
-    const { data, error } = await supabase.auth.verifyOtp({
-      email: email,
-      token: otp,
-      type: 'email',
-    });
-
-    setIsLoading(false);
-
-    if (error) {
-      Alert.alert("Verification Failed", error.message);
-    }
-    // On success, onAuthStateChange in _layout.tsx handles the routing
-  };
-
   return (
     <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -109,119 +65,31 @@ export default function LoginScreen() {
               <Text className="text-lg text-black font-bold text-center" style={{ fontFamily: 'Poppins_600SemiBold' }}>Secure, real-time carpooling.</Text>
             </Animated.View>
 
-            {authMode === 'social' && (
-              <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="space-y-4 gap-4">
-                <Button 
-                  size="lg"
-                  onPress={() => handleOAuth('google')}
-                  className="w-full bg-yellow-400 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl flex-row items-center justify-center h-16" 
-                  isDisabled={isLoading}
-                >
-                  <Feather name="mail" size={24} color="black" style={{ marginRight: 12 }} />
-                  <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Continue with Google</Text>
-                </Button>
+            <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="space-y-4 gap-4">
+              <Button 
+                size="lg"
+                onPress={() => handleOAuth('google')}
+                className="w-full bg-yellow-400 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl flex-row items-center justify-center h-16" 
+                isDisabled={isLoading}
+              >
+                <Feather name="mail" size={24} color="black" style={{ marginRight: 12 }} />
+                <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Continue with Google</Text>
+              </Button>
 
-                <Button 
-                  size="lg"
-                  onPress={() => handleOAuth('apple')}
-                  className="w-full bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl flex-row items-center justify-center h-16" 
-                  isDisabled={isLoading}
-                >
-                  <Feather name="aperture" size={24} color="black" style={{ marginRight: 12 }} />
-                  <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Continue with Apple</Text>
-                </Button>
-                
-                <View className="flex-row items-center my-2 opacity-50">
-                  <View className="flex-1 h-[2px] bg-black" />
-                  <Text className="text-black font-bold mx-4" style={{ fontFamily: 'Poppins_700Bold' }}>OR</Text>
-                  <View className="flex-1 h-[2px] bg-black" />
-                </View>
-
-                <Button 
-                  size="lg"
-                  onPress={() => setAuthMode('email_input')}
-                  className="w-full bg-red-500 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl flex-row items-center justify-center h-16" 
-                >
-                  <Feather name="at-sign" size={24} color="white" style={{ marginRight: 12 }} />
-                  <Text className="text-white text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Login with Email</Text>
-                </Button>
-
-                <Text className="text-black text-xs text-center mt-6 font-bold" style={{ fontFamily: 'Poppins_600SemiBold' }}>
-                  By continuing, you agree to our Terms of Service and Privacy Policy.
-                </Text>
-              </Animated.View>
-            )}
-
-            {authMode === 'email_input' && (
-              <Animated.View entering={FadeIn.duration(400)} className="gap-5 bg-white p-6 rounded-3xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                <View>
-                  <Text className="text-black font-bold text-xl mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Enter Email Address</Text>
-                  <Input 
-                    placeholder="name@example.com" 
-                    placeholderTextColor="#737373"
-                    style={{ color: 'black', fontFamily: 'Poppins_600SemiBold' }}
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    className="border-2 border-black bg-white rounded-xl h-14 text-black"
-                  />
-                </View>
-                
-                <Button 
-                  size="lg"
-                  onPress={handleSendOtp}
-                  className="w-full bg-yellow-400 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl h-16" 
-                  isDisabled={isLoading}
-                >
-                  <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>{isLoading ? "Sending..." : "Send Email Code"}</Text>
-                </Button>
-
-                <Button 
-                  size="md"
-                  onPress={() => setAuthMode('social')}
-                  className="w-full bg-transparent mt-2" 
-                >
-                  <Text className="text-red-500 font-bold text-base" style={{ fontFamily: 'Poppins_700Bold' }}>Cancel</Text>
-                </Button>
-              </Animated.View>
-            )}
-
-            {authMode === 'otp_input' && (
-              <Animated.View entering={FadeIn.duration(400)} className="gap-5 bg-white p-6 rounded-3xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                <View>
-                  <Text className="text-black font-bold text-xl mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Enter Email Code</Text>
-                  <Text className="text-black font-bold text-xs mb-4" style={{ fontFamily: 'Poppins_600SemiBold' }}>Sent to {email}</Text>
-                  <Input 
-                    placeholder="123456" 
-                    placeholderTextColor="#737373"
-                    style={{ color: 'black', fontFamily: 'Poppins_600SemiBold', textAlign: 'center', fontSize: 24, letterSpacing: 8 }}
-                    value={otp}
-                    onChangeText={setOtp}
-                    keyboardType="number-pad"
-                    maxLength={6}
-                    className="border-2 border-black bg-white rounded-xl h-16 text-black"
-                  />
-                </View>
-                
-                <Button 
-                  size="lg"
-                  onPress={handleVerifyOtp}
-                  className="w-full bg-yellow-400 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl h-16" 
-                  isDisabled={isLoading || otp.length < 6}
-                >
-                  <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>{isLoading ? "Verifying..." : "Verify & Login"}</Text>
-                </Button>
-
-                <Button 
-                  size="md"
-                  onPress={() => setAuthMode('email_input')}
-                  className="w-full bg-transparent mt-2" 
-                >
-                  <Text className="text-red-500 font-bold text-base" style={{ fontFamily: 'Poppins_700Bold' }}>Back</Text>
-                </Button>
-              </Animated.View>
-            )}
+              <Button 
+                size="lg"
+                onPress={() => handleOAuth('apple')}
+                className="w-full bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl flex-row items-center justify-center h-16" 
+                isDisabled={isLoading}
+              >
+                <Feather name="aperture" size={24} color="black" style={{ marginRight: 12 }} />
+                <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Continue with Apple</Text>
+              </Button>
+              
+              <Text className="text-black text-xs text-center mt-6 font-bold" style={{ fontFamily: 'Poppins_600SemiBold' }}>
+                By continuing, you agree to our Terms of Service and Privacy Policy.
+              </Text>
+            </Animated.View>
 
           </View>
         </ScrollView>
