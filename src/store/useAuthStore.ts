@@ -10,6 +10,7 @@ interface AuthState {
   logout: () => Promise<void>;
   updateProfile: (updates: Partial<User>) => Promise<void>;
   completeOnboarding: (phone: string, upiId: string) => Promise<void>;
+  bypassLogin: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -107,4 +108,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       alert(error.message);
     }
   },
+
+  bypassLogin: () => {
+    set({
+      user: {
+        id: 'dev-bypass-123',
+        name: 'Dev Tester',
+        phone: '+919999999999',
+        upi_id: 'dev@upi',
+        default_fuel_avg: 15.0
+      },
+      needsOnboarding: false
+    });
+  }
 }));

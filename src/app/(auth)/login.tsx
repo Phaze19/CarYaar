@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
-import { Button, Input } from 'heroui-native';
-import Animated, { FadeInDown, FadeInUp, FadeIn } from 'react-native-reanimated';
+import { Button } from 'heroui-native';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import Feather from '@expo/vector-icons/Feather';
 import { supabase } from '../../lib/supabase';
+import { useAuthStore } from '../../store/useAuthStore';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import { makeRedirectUri } from 'expo-auth-session';
@@ -12,7 +13,8 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(false);
-  
+  const { bypassLogin } = useAuthStore();
+
   const handleOAuth = async (provider: 'google' | 'apple') => {
     setIsLoading(true);
     try {
@@ -89,6 +91,14 @@ export default function LoginScreen() {
               <Text className="text-black text-xs text-center mt-6 font-bold" style={{ fontFamily: 'Poppins_600SemiBold' }}>
                 By continuing, you agree to our Terms of Service and Privacy Policy.
               </Text>
+              
+              <Button 
+                size="md"
+                onPress={bypassLogin}
+                className="w-full bg-transparent mt-4 border-2 border-dashed border-red-500" 
+              >
+                <Text className="text-red-500 font-bold text-base" style={{ fontFamily: 'Poppins_700Bold' }}>Dev Bypass (Simulator Only)</Text>
+              </Button>
             </Animated.View>
 
           </View>
