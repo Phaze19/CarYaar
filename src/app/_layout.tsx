@@ -43,7 +43,7 @@ TaskManager.defineTask(GEOFENCE_TASK, async ({ data: { eventType, region }, erro
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout(): JSX.Element | null {
-  const { user, needsOnboarding, checkSession } = useAuthStore();
+  const { user, needsOnboarding, checkSession, isLoading } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
 
@@ -70,6 +70,8 @@ export default function RootLayout(): JSX.Element | null {
     const isLogin = segments[1] === 'login';
     const isOnboarding = segments[1] === 'onboarding';
 
+    if (isLoading) return;
+
     if (!user && !needsOnboarding && (!inAuthGroup || isOnboarding)) {
       // Not logged in at all, go to login
       router.replace('/(auth)/login');
@@ -80,9 +82,9 @@ export default function RootLayout(): JSX.Element | null {
       // Fully authenticated and on auth screen, go to main app
       router.replace('/(tabs)');
     }
-  }, [user, needsOnboarding, segments]);
+  }, [user, needsOnboarding, segments, isLoading]);
 
-  if (!fontsLoaded) return null;
+  if (!fontsLoaded || isLoading) return null;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
