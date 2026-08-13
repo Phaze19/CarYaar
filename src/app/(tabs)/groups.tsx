@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, RefreshControl, Alert, Share } from 'react-native';
+import { View, Text, ScrollView, RefreshControl, Alert, Share, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Button, Input } from 'heroui-native';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useSocialStore } from '../../store/useSocialStore';
@@ -8,6 +9,7 @@ import Feather from '@expo/vector-icons/Feather';
 export default function GroupsScreen() {
   const { user } = useAuthStore();
   const { groups, fetchGroups, createGroup, joinGroup } = useSocialStore();
+  const router = useRouter();
   
   const [refreshing, setRefreshing] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
@@ -128,7 +130,12 @@ export default function GroupsScreen() {
           ) : (
             <View className="gap-3">
               {groups.map(group => (
-                <View key={group.id} className="bg-white p-4 rounded-2xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <TouchableOpacity 
+                  key={group.id} 
+                  onPress={() => router.push(`/group/${group.id}` as any)}
+                  activeOpacity={0.8}
+                  className="bg-white p-4 rounded-2xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                >
                   <View className="flex-row justify-between items-center mb-2">
                     <Text className="text-black font-bold text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>{group.name}</Text>
                     <Button 
@@ -141,7 +148,7 @@ export default function GroupsScreen() {
                     </Button>
                   </View>
                   <Text className="text-gray-500 text-xs" style={{ fontFamily: 'Poppins_600SemiBold' }}>Invite Code: {group.invite_code}</Text>
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           )}

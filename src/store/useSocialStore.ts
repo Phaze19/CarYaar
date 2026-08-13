@@ -11,6 +11,8 @@ interface SocialState {
   fetchGroups: (userId: string) => Promise<void>;
   createGroup: (userId: string, name: string) => Promise<Group | null>;
   joinGroup: (userId: string, inviteCode: string) => Promise<boolean>;
+  fetchGroupMembers: (groupId: string) => Promise<GroupMember[]>;
+  addFriendToGroup: (groupId: string, friendUserId: string) => Promise<boolean>;
   
   fetchFriends: (userId: string) => Promise<void>;
   sendFriendRequest: (myUserId: string, friendPhone: string) => Promise<boolean>;
@@ -87,6 +89,30 @@ export const useSocialStore = create<SocialState>((set, get) => ({
     }
     
     await get().fetchGroups(userId);
+    return true;
+  },
+
+  fetchGroupMembers: async (groupId) => {
+    const { data } = await supabase
+      .from('group_members')
+      .select('*, user:users(*)')
+      .eq('group_id', groupId)
+      .order('joined_at', { ascending: true });
+      
+    if (data) {
+      return data;
+    }
+    return [];
+  },
+
+  addFriendToGroup: async (groupId, friendUserId) => {
+    const { error } = await supabase.from('group_members').insert({ group_id: groupId, user_id: friendUserId });
+    if (error) {
+       if (error.code === '23505') alert("Friend is already in this group!");
+       else alert(error.message);
+       return false;
+    }
+    alert("Friend added to group!");
     return true;
   },
 

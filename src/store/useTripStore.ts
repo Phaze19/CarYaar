@@ -259,7 +259,7 @@ export const useTripStore = create<TripState>((set, get) => ({
     // 2. Fetch pending trips where I am the rider (I owe them)
     const { data: iOweThem } = await supabase
       .from('trip_riders')
-      .select('share_amount, trips!inner(driver_id), trips!inner(users!trips_driver_id_fkey(name))')
+      .select('share_amount, trips!inner(driver_id, users!inner(name))')
       .eq('rider_id', userId)
       .eq('payment_status', 'pending');
       
