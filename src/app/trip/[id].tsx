@@ -17,6 +17,17 @@ export default function TripDetailScreen() {
   const [isCheckingIn, setIsCheckingIn] = React.useState(false);
   const [isEnding, setIsEnding] = React.useState(false);
 
+  React.useEffect(() => {
+    if (!currentTrip || currentTrip.id !== id) {
+      const activeTrips = useTripStore.getState().currentTrips;
+      const found = activeTrips.find(t => t.id === id);
+      if (found) {
+        useTripStore.setState({ currentTrip: found });
+        useTripStore.getState().subscribeToRiders(id as string);
+      }
+    }
+  }, [id, currentTrip]);
+
   if (!currentTrip || currentTrip.id !== id) {
     return (
       <View className="flex-1 justify-center items-center bg-white">

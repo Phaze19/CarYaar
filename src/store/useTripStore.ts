@@ -148,12 +148,19 @@ export const useTripStore = create<TripState>((set, get) => ({
          if (tripData) activeTripCost = tripData.total_cost;
       }
       
-      // Phase 6: Send push notifications to all passengers
+      // Phase 6: Save balances and send push notifications to all passengers
       const riderIds = activeRiders.map(r => r.rider_id);
       if (riderIds.length > 0) {
+        const costPerRider = activeTripCost / activeRiders.length;
+        
+        // FIX: Save the calculated amount so balances work correctly!
+        await supabase
+          .from('trip_riders')
+          .update({ share_amount: costPerRider })
+          .eq('trip_id', targetTripId);
+
         const { data: usersData } = await supabase.from('users').select('push_token').in('id', riderIds);
         if (usersData) {
-          const costPerRider = activeTripCost / activeRiders.length;
           const msg = `Trip completed! You owe ₹${costPerRider.toFixed(2)}. Open CarYaar to settle.`;
           
           usersData.forEach(u => {

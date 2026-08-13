@@ -91,12 +91,13 @@ export default function AnimatedSplash({ onFinish }: AnimatedSplashProps) {
       {/* CARYAAR Text */}
       <Animated.View style={textStyle}>
         <Text style={{ 
-          fontFamily: 'RacingSansOne_400Regular', 
-          fontSize: 60, 
-          color: '#facc15', // yellow-400
-          textShadowColor: 'rgba(255, 255, 255, 0.3)',
+          fontFamily: 'Poppins_700Bold', 
+          fontSize: 50, 
+          color: '#ef4444', // red-500 to match app theme
+          letterSpacing: 2,
+          textShadowColor: 'rgba(255, 255, 255, 0.2)',
           textShadowOffset: { width: 0, height: 2 },
-          textShadowRadius: 10,
+          textShadowRadius: 8,
         }}>
           CARYAAR
         </Text>
@@ -107,14 +108,14 @@ export default function AnimatedSplash({ onFinish }: AnimatedSplashProps) {
         <View style={{ 
           width: 80, 
           height: 80, 
-          backgroundColor: '#facc15', 
+          backgroundColor: '#ef4444', 
           borderRadius: 40,
           justifyContent: 'center',
           alignItems: 'center',
           borderWidth: 4,
           borderColor: '#ffffff'
         }}>
-          <Feather name="truck" size={40} color="#000000" />
+          <Feather name="truck" size={40} color="#ffffff" />
         </View>
       </Animated.View>
       
