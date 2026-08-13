@@ -5,7 +5,10 @@ import type { ColorValue } from "react-native";
 import { View } from "react-native";
 import { useEffect } from "react";
 import { useAuthStore } from "../../store/useAuthStore";
+import { useSocialStore } from "../../store/useSocialStore";
 import { registerForPushNotificationsAsync } from "../../lib/notifications";
+import * as Linking from 'expo-linking';
+import { Alert } from "react-native";
 
 type IoniconName = ComponentProps<typeof Ionicons>["name"];
 
@@ -19,12 +22,33 @@ function TabIcon({ name, color, focused }: { name: IoniconName; color: ColorValu
 
 export default function TabsLayout(): JSX.Element {
   const { user } = useAuthStore();
+  const { joinGroup } = useSocialStore();
+  const url = Linking.useURL();
 
   useEffect(() => {
     if (user) {
       registerForPushNotificationsAsync(user.id);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (url && user) {
+      const { hostname, path } = Linking.parse(url);
+      if (hostname === 'group' && path?.startsWith('invite/')) {
+        const inviteCode = path.split('/')[1];
+        if (inviteCode) {
+          Alert.alert(
+            "Join Group",
+            `Do you want to join this group? (Code: ${inviteCode})`,
+            [
+              { text: "Cancel", style: "cancel" },
+              { text: "Join", onPress: () => joinGroup(user.id, inviteCode) }
+            ]
+          );
+        }
+      }
+    }
+  }, [url, user]);
 
   return (
     <Tabs 
@@ -68,6 +92,20 @@ export default function TabsLayout(): JSX.Element {
         options={{
           title: "History",
           tabBarIcon: ({ color, focused }) => <TabIcon name={focused ? "time" : "time-outline"} color={color} focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name="friends"
+        options={{
+          title: "Friends",
+          tabBarIcon: ({ color, focused }) => <TabIcon name={focused ? "people" : "people-outline"} color={color} focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name="groups"
+        options={{
+          title: "Groups",
+          tabBarIcon: ({ color, focused }) => <TabIcon name={focused ? "car" : "car-outline"} color={color} focused={focused} />,
         }}
       />
       <Tabs.Screen

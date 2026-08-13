@@ -10,7 +10,7 @@ import Feather from '@expo/vector-icons/Feather';
 
 export default function HomeScreen() {
   const { user } = useAuthStore();
-  const { currentTrip, fetchActiveTrip } = useTripStore();
+  const { currentTrips, fetchActiveTrips } = useTripStore();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
 
@@ -21,12 +21,12 @@ export default function HomeScreen() {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await fetchActiveTrip();
+    if (user) await fetchActiveTrips(user.id);
     setRefreshing(false);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    fetchActiveTrip();
+    if (user) fetchActiveTrips(user.id);
     // eslint-disable-next-line react-hooks/immutability
     pulse.value = withRepeat(withSequence(withTiming(0.5, { duration: 1000 }), withTiming(1, { duration: 1000 })), -1);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,41 +53,43 @@ export default function HomeScreen() {
           </View>
         </Animated.View>
 
-        {/* Current Trip Status */}
+        {/* Current Trip Statuses */}
         <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="mb-8">
-          <View className="bg-white p-6 rounded-3xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(239,68,68,1)] relative overflow-hidden">
-            
-            <View className="flex-row justify-between items-center mb-4">
-              <Text className="text-black font-bold tracking-widest text-sm uppercase" style={{ fontFamily: 'Poppins_700Bold' }}>
-                {currentTrip ? 'Active Trip' : 'No Active Trip'}
-              </Text>
-              {currentTrip && (
+          
+          <View className="flex-row justify-between items-center mb-4">
+             <Text className="text-black font-bold tracking-widest text-sm uppercase" style={{ fontFamily: 'Poppins_700Bold' }}>
+                {currentTrips.length > 0 ? 'Active Trips' : 'No Active Trip'}
+             </Text>
+             {currentTrips.length > 0 && (
                 <Animated.View style={pulseStyle} className="bg-red-500 px-3 py-1 rounded-full border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                   <Text className="text-white font-bold text-xs" style={{ fontFamily: 'Poppins_700Bold' }}>LIVE</Text>
                 </Animated.View>
-              )}
-            </View>
-
-            {currentTrip ? (
-              <View>
-                <Text className="text-4xl font-bold text-black tracking-tight mb-1" style={{ fontFamily: 'RacingSansOne_400Regular' }}>{currentTrip.distance_km} km Route</Text>
-                <Text className="text-neutral-600 font-bold mb-6 text-lg" style={{ fontFamily: 'Poppins_700Bold' }}>Total Cost: ₹{currentTrip.total_cost.toFixed(2)}</Text>
-                
-                <Button 
-                  className="w-full bg-yellow-400 rounded-2xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] h-16" 
-                  size="lg" 
-                  onPress={() => router.push(`/trip/${currentTrip.id}`)}
-                >
-                  <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>View Dashboard</Text>
-                </Button>
-              </View>
-            ) : (
-              <View>
-                <Text className="text-3xl font-bold text-neutral-400 tracking-tight mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>No active trip</Text>
-                <Text className="text-neutral-500 font-bold mb-6" style={{ fontFamily: 'Poppins_600SemiBold' }}>Start a new trip or ask your driver to check in.</Text>
-              </View>
-            )}
+             )}
           </View>
+
+          {currentTrips.length > 0 ? (
+            <View className="gap-4">
+              {currentTrips.map(trip => (
+                <View key={trip.id} className="bg-white p-6 rounded-3xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(239,68,68,1)] relative overflow-hidden">
+                  <Text className="text-4xl font-bold text-black tracking-tight mb-1" style={{ fontFamily: 'RacingSansOne_400Regular' }}>{trip.distance_km} km Route</Text>
+                  <Text className="text-neutral-600 font-bold mb-6 text-lg" style={{ fontFamily: 'Poppins_700Bold' }}>Total Cost: ₹{trip.total_cost.toFixed(2)}</Text>
+                  
+                  <Button 
+                    className="w-full bg-yellow-400 rounded-2xl border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] h-16" 
+                    size="lg" 
+                    onPress={() => router.push(`/trip/${trip.id}`)}
+                  >
+                    <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>View Dashboard</Text>
+                  </Button>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <View className="bg-white p-6 rounded-3xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(239,68,68,1)] relative overflow-hidden">
+              <Text className="text-3xl font-bold text-neutral-400 tracking-tight mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>No active trips</Text>
+              <Text className="text-neutral-500 font-bold mb-6" style={{ fontFamily: 'Poppins_600SemiBold' }}>Start a new trip or ask your driver to check in.</Text>
+            </View>
+          )}
         </Animated.View>
 
         {/* Quick Actions */}

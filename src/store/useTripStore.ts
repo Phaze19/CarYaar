@@ -9,7 +9,9 @@ interface TripState {
   riders: TripRider[];
   channel: RealtimeChannel | null;
   
-  fetchActiveTrip: () => Promise<void>;
+  currentTrips: Trip[]; // Multiple active trips can be visible now
+  
+  fetchActiveTrips: (userId: string) => Promise<void>;
   createTrip: (trip: Omit<Trip, 'id' | 'created_at'>) => Promise<Trip | null>;
   addRider: (rider: Omit<TripRider, 'id' | 'created_at'>) => Promise<void>;
   updateRiderStatus: (riderId: string, status: 'pending' | 'paid') => Promise<void>;
@@ -27,24 +29,41 @@ interface TripState {
 
 export const useTripStore = create<TripState>((set, get) => ({
   currentTrip: null,
+  currentTrips: [],
   riders: [],
   channel: null,
   pastTrips: [],
   balances: [],
 
-  fetchActiveTrip: async () => {
-    // For V1 MVP: Just grab the latest active trip in the database
-    // In production, you'd filter by trips in the user's group or via a join code.
-    const { data: trips } = await supabase
-      .from('trips')
-      .select('*')
-      .eq('status', 'active')
-      .order('created_at', { ascending: false })
-      .limit(1);
+  fetchActiveTrips: async (userId) => {
+    // 1. Get my groups
+    const { data: memberData } = await supabase.from('group_members').select('group_id').eq('user_id', userId);
+    const groupIds = memberData?.map(m => m.group_id) || [];
+    
+    // 2. Get my friends
+    const { data: friendData } = await supabase.from('friends').select('user1_id, user2_id').eq('status', 'accepted').or(`user1_id.eq.${userId},user2_id.eq.${userId}`);
+    const friendIds = friendData?.map(f => f.user1_id === userId ? f.user2_id : f.user1_id) || [];
+    // Add myself to friendIds so I can see my own standalone trips
+    friendIds.push(userId);
+    
+    // Fetch trips: either in my groups OR (standalone AND driver is a friend)
+    let query = supabase.from('trips').select('*').eq('status', 'active');
+    
+    if (groupIds.length > 0) {
+      query = query.or(`group_id.in.(${groupIds.join(',')}),and(group_id.is.null,driver_id.in.(${friendIds.join(',')}))`);
+    } else {
+      query = query.is('group_id', null).in('driver_id', friendIds);
+    }
+    
+    const { data: trips } = await query.order('created_at', { ascending: false });
 
-    if (trips && trips.length > 0) {
-      set({ currentTrip: trips[0] });
-      get().subscribeToRiders(trips[0].id);
+    if (trips) {
+      set({ currentTrips: trips });
+      // If we have an actively selected trip, make sure it's synced
+      const current = get().currentTrip;
+      if (!current && trips.length > 0) {
+         // Auto select the most relevant one, or let UI handle it
+      }
     }
   },
 

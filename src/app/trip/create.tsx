@@ -3,6 +3,7 @@ import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Linking } from 
 import { Button, Input } from 'heroui-native';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useTripStore } from '../../store/useTripStore';
+import { useSocialStore } from '../../store/useSocialStore';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
@@ -13,12 +14,18 @@ const GEOFENCE_TASK = 'GEOFENCE_TRIP_END_TASK';
 export default function CreateTripScreen() {
   const { user } = useAuthStore();
   const { createTrip } = useTripStore();
+  const { groups, fetchGroups } = useSocialStore();
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
+
+  React.useEffect(() => {
+    if (user) fetchGroups(user.id);
+  }, [user]);
 
   const [destination, setDestination] = useState('');
   const [distance, setDistance] = useState('');
   const [fuelPrice, setFuelPrice] = useState('100');
+  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   
   const handleCreateTrip = async () => {
     if (!user || !distance || !fuelPrice) {
@@ -65,6 +72,7 @@ export default function CreateTripScreen() {
     
     const newTrip = {
       driver_id: user.id,
+      group_id: selectedGroupId || undefined,
       date: new Date().toISOString().split('T')[0],
       distance_km: dist,
       fuel_price: price,
@@ -120,6 +128,28 @@ export default function CreateTripScreen() {
           </Animated.View>
 
           <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-white p-6 rounded-3xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(239,68,68,1)] space-y-4 gap-5">
+            <View>
+              <Text className="text-black font-bold text-lg mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Who is this trip for?</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row">
+                <Button
+                  onPress={() => setSelectedGroupId(null)}
+                  size="sm"
+                  className={`mr-3 border-2 border-black rounded-xl px-4 ${selectedGroupId === null ? 'bg-black shadow-[2px_2px_0px_0px_rgba(239,68,68,1)]' : 'bg-gray-200'}`}
+                >
+                  <Text className={`font-bold ${selectedGroupId === null ? 'text-white' : 'text-black'}`} style={{ fontFamily: 'Poppins_700Bold' }}>Standalone (All Friends)</Text>
+                </Button>
+                {groups.map(g => (
+                  <Button
+                    key={g.id}
+                    onPress={() => setSelectedGroupId(g.id)}
+                    size="sm"
+                    className={`mr-3 border-2 border-black rounded-xl px-4 ${selectedGroupId === g.id ? 'bg-black shadow-[2px_2px_0px_0px_rgba(239,68,68,1)]' : 'bg-gray-200'}`}
+                  >
+                    <Text className={`font-bold ${selectedGroupId === g.id ? 'text-white' : 'text-black'}`} style={{ fontFamily: 'Poppins_700Bold' }}>{g.name}</Text>
+                  </Button>
+                ))}
+              </ScrollView>
+            </View>
             <View>
               <Text className="text-black font-bold text-lg mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Destination (Optional)</Text>
               <Input 

@@ -17,6 +17,11 @@ export default function BalancesScreen() {
     }
   }, [user]);
 
+  const totalOwedToMe = balances.reduce((acc, curr) => curr.netAmount > 0 ? acc + curr.netAmount : acc, 0);
+  const totalIOwe = balances.reduce((acc, curr) => curr.netAmount < 0 ? acc + Math.abs(curr.netAmount) : acc, 0);
+  const grandTotal = totalOwedToMe - totalIOwe;
+  const isPositive = grandTotal >= 0;
+
   const handleSettle = async (balance: import('../../types').Balance) => {
     if (!user) return;
     setSettlingId(balance.otherUserId);
@@ -55,7 +60,24 @@ export default function BalancesScreen() {
           <Text className="text-5xl font-bold text-black tracking-tight" style={{ fontFamily: 'RacingSansOne_400Regular' }}>NET BALANCES</Text>
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.duration(800).delay(100).springify()} className="gap-5">
+        <Animated.View entering={FadeInDown.delay(100).springify()} className="bg-black p-6 rounded-3xl shadow-[6px_6px_0px_0px_rgba(239,68,68,1)] mb-8">
+          <Text className="text-gray-300 font-bold text-lg mb-1" style={{ fontFamily: 'Poppins_700Bold' }}>Grand Total</Text>
+          <Text className={`text-4xl font-bold ${isPositive ? 'text-green-400' : 'text-red-400'}`} style={{ fontFamily: 'RacingSansOne_400Regular' }}>
+            {isPositive ? '+' : '-'}₹{Math.abs(grandTotal).toFixed(2)}
+          </Text>
+          <View className="flex-row justify-between mt-4 border-t border-gray-800 pt-4">
+            <View>
+              <Text className="text-gray-400 font-bold text-xs uppercase" style={{ fontFamily: 'Poppins_700Bold' }}>You are owed</Text>
+              <Text className="text-white font-bold text-lg" style={{ fontFamily: 'RacingSansOne_400Regular' }}>₹{totalOwedToMe.toFixed(2)}</Text>
+            </View>
+            <View className="items-end">
+              <Text className="text-gray-400 font-bold text-xs uppercase" style={{ fontFamily: 'Poppins_700Bold' }}>You owe</Text>
+              <Text className="text-white font-bold text-lg" style={{ fontFamily: 'RacingSansOne_400Regular' }}>₹{totalIOwe.toFixed(2)}</Text>
+            </View>
+          </View>
+        </Animated.View>
+
+        <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="gap-5">
           {balances.length === 0 ? (
             <View className="p-8 border-4 border-black border-dashed rounded-3xl items-center justify-center bg-white mt-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <Text className="text-black font-bold text-center text-lg leading-relaxed" style={{ fontFamily: 'Poppins_600SemiBold' }}>
