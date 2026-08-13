@@ -11,12 +11,16 @@ interface SocialState {
   fetchGroups: (userId: string) => Promise<void>;
   createGroup: (userId: string, name: string) => Promise<Group | null>;
   joinGroup: (userId: string, inviteCode: string) => Promise<boolean>;
+  deleteGroup: (groupId: string) => Promise<boolean>;
+  leaveGroup: (groupId: string, userId: string) => Promise<boolean>;
+  
   fetchGroupMembers: (groupId: string) => Promise<GroupMember[]>;
   addFriendToGroup: (groupId: string, friendUserId: string) => Promise<boolean>;
   
   fetchFriends: (userId: string) => Promise<void>;
   sendFriendRequest: (myUserId: string, friendPhone: string) => Promise<boolean>;
   acceptFriendRequest: (friendshipId: string) => Promise<void>;
+  removeFriend: (friendshipId: string) => Promise<boolean>;
 }
 
 export const useSocialStore = create<SocialState>((set, get) => ({
@@ -89,6 +93,26 @@ export const useSocialStore = create<SocialState>((set, get) => ({
     }
     
     await get().fetchGroups(userId);
+    return true;
+  },
+
+  deleteGroup: async (groupId) => {
+    const { error } = await supabase.from('groups').delete().eq('id', groupId);
+    if (error) {
+      alert(error.message);
+      return false;
+    }
+    set((state) => ({ groups: state.groups.filter(g => g.id !== groupId) }));
+    return true;
+  },
+
+  leaveGroup: async (groupId, userId) => {
+    const { error } = await supabase.from('group_members').delete().eq('group_id', groupId).eq('user_id', userId);
+    if (error) {
+      alert(error.message);
+      return false;
+    }
+    set((state) => ({ groups: state.groups.filter(g => g.id !== groupId) }));
     return true;
   },
 
@@ -186,5 +210,15 @@ export const useSocialStore = create<SocialState>((set, get) => ({
       // Refresh friends list. Assuming we have userId context in component
       // This will be handled by calling fetchFriends in the component after this succeeds.
     }
+  },
+
+  removeFriend: async (friendshipId) => {
+    const { error } = await supabase.from('friends').delete().eq('id', friendshipId);
+    if (error) {
+      alert(error.message);
+      return false;
+    }
+    set((state) => ({ friends: state.friends.filter(f => f.id !== friendshipId) }));
+    return true;
   }
 }));

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Input } from 'heroui-native';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -7,7 +7,7 @@ import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 import Feather from '@expo/vector-icons/Feather';
 
 export default function ProfileScreen() {
-  const { user, updateProfile, logout } = useAuthStore();
+  const { user, updateProfile, logout, deleteAccount } = useAuthStore();
   
   const [upiId, setUpiId] = useState(user?.upi_id || '');
   const [fuelAvg, setFuelAvg] = useState(user?.default_fuel_avg?.toString() || '15');
@@ -25,6 +25,23 @@ export default function ProfileScreen() {
 
   const handleLogout = () => {
     logout();
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      "Delete Account",
+      "Are you sure you want to permanently delete your account? This action cannot be undone and will delete all your groups, friends, and trips.",
+      [
+        { text: "Cancel", style: "cancel" },
+        { 
+          text: "Delete", 
+          style: "destructive",
+          onPress: async () => {
+            await deleteAccount();
+          }
+        }
+      ]
+    );
   };
 
   if (!user) return null;
@@ -129,11 +146,19 @@ export default function ProfileScreen() {
             </View>
 
             <Button 
-              className="w-full bg-red-500 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl mb-8 h-16" 
+              className="w-full bg-black border-4 border-black shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] rounded-2xl mb-4 h-16" 
               size="lg"
               onPress={logout}
             >
-              <Text className="text-white text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Sign Out Completely</Text>
+              <Text className="text-white text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Sign Out</Text>
+            </Button>
+            
+            <Button 
+              className="w-full bg-red-100 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl mb-8 h-16" 
+              size="lg"
+              onPress={handleDeleteAccount}
+            >
+              <Text className="text-red-600 text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Delete Account</Text>
             </Button>
           </Animated.View>
 

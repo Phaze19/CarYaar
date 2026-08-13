@@ -8,6 +8,7 @@ interface AuthState {
   needsOnboarding: boolean;
   checkSession: () => Promise<void>;
   logout: () => Promise<void>;
+  deleteAccount: () => Promise<boolean>;
   updateProfile: (updates: Partial<User>) => Promise<void>;
   completeOnboarding: (name: string, phone: string, upiId: string) => Promise<void>;
   bypassLogin: () => void;
@@ -95,6 +96,21 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   logout: async () => {
     await supabase.auth.signOut();
     set({ user: null, needsOnboarding: false });
+  },
+
+  deleteAccount: async () => {
+    set({ isLoading: true });
+    const { error } = await supabase.rpc('delete_user');
+    
+    if (error) {
+      alert("Error deleting account: " + error.message);
+      set({ isLoading: false });
+      return false;
+    }
+    
+    await supabase.auth.signOut();
+    set({ user: null, needsOnboarding: false, isLoading: false });
+    return true;
   },
 
   updateProfile: async (updates) => {

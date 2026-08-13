@@ -3,18 +3,23 @@ import { View, Text, ScrollView, RefreshControl } from 'react-native';
 import { Button, Input } from 'heroui-native';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useSocialStore } from '../../store/useSocialStore';
+import { useTripStore } from '../../store/useTripStore';
 import Feather from '@expo/vector-icons/Feather';
 
 export default function FriendsScreen() {
   const { user } = useAuthStore();
-  const { friends, pendingRequests, fetchFriends, sendFriendRequest, acceptFriendRequest } = useSocialStore();
+  const { friends, pendingRequests, fetchFriends, sendFriendRequest, acceptFriendRequest, removeFriend } = useSocialStore();
+  const { balances, fetchBalances } = useTripStore();
   
   const [refreshing, setRefreshing] = useState(false);
   const [phoneToInvite, setPhoneToInvite] = useState('');
   const [isSending, setIsSending] = useState(false);
 
   const loadData = async () => {
-    if (user) await fetchFriends(user.id);
+    if (user) {
+      await fetchFriends(user.id);
+      await fetchBalances(user.id);
+    }
   };
 
   useEffect(() => {
@@ -40,6 +45,11 @@ export default function FriendsScreen() {
 
   const handleAccept = async (friendshipId: string) => {
     await acceptFriendRequest(friendshipId);
+    loadData();
+  };
+
+  const handleRemoveFriend = async (friendshipId: string) => {
+    await removeFriend(friendshipId);
     loadData();
   };
 
@@ -109,17 +119,44 @@ export default function FriendsScreen() {
             <Text className="text-gray-500 text-center mt-4 font-bold" style={{ fontFamily: 'Poppins_600SemiBold' }}>No friends added yet.</Text>
           ) : (
             <View className="gap-3">
-              {friends.map(friend => (
-                <View key={friend.id} className="bg-white p-4 rounded-2xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex-row items-center gap-3">
-                  <View className="w-10 h-10 bg-yellow-400 rounded-full border-2 border-black items-center justify-center">
-                    <Feather name="user" size={20} color="black" />
+              {friends.map(friend => {
+                const memberBalance = balances.find(b => b.otherUserId === friend.friend_user?.id);
+                const netAmount = memberBalance ? memberBalance.netAmount : 0;
+                
+                return (
+                  <View key={friend.id} className="bg-white p-4 rounded-2xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex-row items-center justify-between">
+                    <View className="flex-row items-center gap-3">
+                      <View className="w-10 h-10 bg-yellow-400 rounded-full border-2 border-black items-center justify-center">
+                        <Feather name="user" size={20} color="black" />
+                      </View>
+                      <View>
+                        <Text className="text-black font-bold text-lg" style={{ fontFamily: 'Poppins_700Bold' }}>{friend.friend_user?.name}</Text>
+                        <Text className="text-gray-500 text-sm" style={{ fontFamily: 'Poppins_600SemiBold' }}>{friend.friend_user?.phone}</Text>
+                      </View>
+                    </View>
+                    
+                    <View className="items-end flex-row gap-3">
+                      <View className="items-end justify-center mr-2">
+                        {netAmount === 0 ? (
+                          <Text className="text-gray-500 text-xs" style={{ fontFamily: 'Poppins_700Bold' }}>Settled Up</Text>
+                        ) : netAmount > 0 ? (
+                          <Text className="text-green-600 text-xs" style={{ fontFamily: 'Poppins_700Bold' }}>Owes you ₹{netAmount.toFixed(2)}</Text>
+                        ) : (
+                          <Text className="text-red-600 text-xs" style={{ fontFamily: 'Poppins_700Bold' }}>You owe ₹{Math.abs(netAmount).toFixed(2)}</Text>
+                        )}
+                      </View>
+                      
+                      <Button 
+                        size="sm"
+                        onPress={() => handleRemoveFriend(friend.id)}
+                        className="bg-red-100 border-2 border-black rounded-xl h-10 px-3 justify-center items-center"
+                      >
+                        <Feather name="trash-2" size={16} color="#dc2626" />
+                      </Button>
+                    </View>
                   </View>
-                  <View className="flex-1">
-                    <Text className="text-black font-bold text-lg" style={{ fontFamily: 'Poppins_700Bold' }}>{friend.friend_user?.name}</Text>
-                    <Text className="text-gray-500 text-sm" style={{ fontFamily: 'Poppins_600SemiBold' }}>{friend.friend_user?.phone}</Text>
-                  </View>
-                </View>
-              ))}
+                );
+              })}
             </View>
           )}
         </View>

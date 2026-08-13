@@ -13,7 +13,7 @@ export default function GroupDetailsScreen() {
   const router = useRouter();
   
   const { user } = useAuthStore();
-  const { groups, fetchGroupMembers, addFriendToGroup, friends, fetchFriends } = useSocialStore();
+  const { groups, fetchGroupMembers, addFriendToGroup, friends, fetchFriends, deleteGroup, leaveGroup } = useSocialStore();
   const { balances, fetchBalances } = useTripStore();
   
   const [members, setMembers] = useState<GroupMember[]>([]);
@@ -56,6 +56,22 @@ export default function GroupDetailsScreen() {
     const success = await addFriendToGroup(id, friendId);
     if (success) {
       await loadData();
+    }
+  };
+
+  const handleDeleteGroup = async () => {
+    if (!id) return;
+    const success = await deleteGroup(id);
+    if (success) {
+      router.back();
+    }
+  };
+
+  const handleLeaveGroup = async () => {
+    if (!id || !user) return;
+    const success = await leaveGroup(id, user.id);
+    if (success) {
+      router.back();
     }
   };
 
@@ -163,6 +179,24 @@ export default function GroupDetailsScreen() {
             ))}
           </View>
         )}
+
+        <View className="mb-12 mt-4">
+          {group.created_by === user?.id ? (
+            <Button 
+              onPress={handleDeleteGroup}
+              className="w-full bg-red-500 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl h-16"
+            >
+              <Text className="text-white text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Delete Group</Text>
+            </Button>
+          ) : (
+            <Button 
+              onPress={handleLeaveGroup}
+              className="w-full bg-red-100 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl h-16"
+            >
+              <Text className="text-red-600 text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Leave Group</Text>
+            </Button>
+          )}
+        </View>
 
       </ScrollView>
     </View>
