@@ -10,7 +10,7 @@ export default function FriendsScreen() {
   const { user } = useAuthStore();
   const { friends, pendingRequests, fetchFriends, sendFriendRequest, acceptFriendRequest, removeFriend } = useSocialStore();
   const { balances, fetchBalances } = useTripStore();
-  
+
   const [refreshing, setRefreshing] = useState(false);
   const [phoneToInvite, setPhoneToInvite] = useState('');
   const [isSending, setIsSending] = useState(false);
@@ -36,7 +36,7 @@ export default function FriendsScreen() {
     if (!phoneToInvite || !user) return;
     setIsSending(true);
     const result = await sendFriendRequest(user.id, phoneToInvite);
-    
+
     if (result === 'SUCCESS') {
       setPhoneToInvite('');
       loadData();
@@ -46,12 +46,12 @@ export default function FriendsScreen() {
         "This phone number is not registered on CarYaar. Would you like to invite them to download the app?",
         [
           { text: "Cancel", style: "cancel" },
-          { 
-            text: "Invite", 
+          {
+            text: "Invite",
             onPress: async () => {
               try {
                 await Share.share({
-                  message: `Hey! I'm using CarYaar to easily split carpool costs. Download the app here to join me:\n\nhttps://expo.dev/artifacts/eas/YOUR_BUILD_LINK_HERE.apk`
+                  message: `Hey! I'm using CarYaar to easily split carpool costs. Download the app here to join me:\n\nhttps://expo.dev/accounts/anuragvedak/projects/caryaar/builds/211d7175-ca8a-4a49-a29c-ab26af469091`
                 });
               } catch (error: any) {
                 alert(error.message);
@@ -65,7 +65,7 @@ export default function FriendsScreen() {
     } else if (result === 'EXISTS') {
       alert("A friend request already exists between you two.");
     }
-    
+
     setIsSending(false);
   };
 
@@ -85,7 +85,7 @@ export default function FriendsScreen() {
         <Text className="text-4xl text-black" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Friends</Text>
       </View>
 
-      <ScrollView 
+      <ScrollView
         className="flex-1 px-6"
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
@@ -94,8 +94,8 @@ export default function FriendsScreen() {
           <Text className="text-black font-bold text-lg mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Add a Friend</Text>
           <View className="flex-row items-center gap-2">
             <View className="flex-1">
-              <Input 
-                placeholder="Phone Number (e.g. 9999999999)" 
+              <Input
+                placeholder="Phone Number (e.g. 9999999999)"
                 placeholderTextColor="#737373"
                 value={phoneToInvite}
                 onChangeText={setPhoneToInvite}
@@ -104,7 +104,7 @@ export default function FriendsScreen() {
                 style={{ color: 'black', fontFamily: 'Poppins_600SemiBold' }}
               />
             </View>
-            <Button 
+            <Button
               onPress={handleSendRequest}
               isDisabled={isSending || !phoneToInvite}
               className="bg-yellow-400 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] h-12 px-4 rounded-xl justify-center items-center"
@@ -125,7 +125,7 @@ export default function FriendsScreen() {
                     <Text className="text-black font-bold text-lg" style={{ fontFamily: 'Poppins_700Bold' }}>{req.friend_user?.name}</Text>
                     <Text className="text-gray-700 text-sm" style={{ fontFamily: 'Poppins_600SemiBold' }}>{req.friend_user?.phone}</Text>
                   </View>
-                  <Button 
+                  <Button
                     size="sm"
                     onPress={() => handleAccept(req.id)}
                     className="bg-green-400 border-2 border-black rounded-xl"
@@ -148,7 +148,7 @@ export default function FriendsScreen() {
               {friends.map(friend => {
                 const memberBalance = balances.find(b => b.otherUserId === friend.friend_user?.id);
                 const netAmount = memberBalance ? memberBalance.netAmount : 0;
-                
+
                 return (
                   <View key={friend.id} className="bg-white p-4 rounded-2xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex-row items-center justify-between">
                     <View className="flex-row items-center gap-3">
@@ -160,7 +160,7 @@ export default function FriendsScreen() {
                         <Text className="text-gray-500 text-sm" style={{ fontFamily: 'Poppins_600SemiBold' }}>{friend.friend_user?.phone}</Text>
                       </View>
                     </View>
-                    
+
                     <View className="items-end flex-row gap-3">
                       <View className="items-end justify-center mr-2">
                         {netAmount === 0 ? (
@@ -171,8 +171,8 @@ export default function FriendsScreen() {
                           <Text className="text-red-600 text-xs" style={{ fontFamily: 'Poppins_700Bold' }}>You owe ₹{Math.abs(netAmount).toFixed(2)}</Text>
                         )}
                       </View>
-                      
-                      <Button 
+
+                      <Button
                         size="sm"
                         onPress={() => handleRemoveFriend(friend.id)}
                         className="bg-red-100 border-2 border-black rounded-xl h-10 px-3 justify-center items-center"
