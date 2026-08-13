@@ -12,8 +12,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import "../global.css";
 import * as TaskManager from 'expo-task-manager';
 import * as Location from 'expo-location';
-import AnimatedSplash from '../components/AnimatedSplash';
-import { useState } from 'react';
 
 const GEOFENCE_TASK = 'GEOFENCE_TRIP_END_TASK';
 
@@ -48,7 +46,6 @@ export default function RootLayout(): JSX.Element | null {
   const { user, needsOnboarding, checkSession } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
-  const [showSplash, setShowSplash] = useState(true);
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -89,18 +86,14 @@ export default function RootLayout(): JSX.Element | null {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      {showSplash ? (
-        <AnimatedSplash onFinish={() => setShowSplash(false)} />
-      ) : (
-        <HeroUINativeProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(auth)/login" options={{ animation: 'fade' }} />
-            <Stack.Screen name="(auth)/onboarding" options={{ animation: 'fade' }} />
-            <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
-          </Stack>
-          <StatusBar style="auto" />
-        </HeroUINativeProvider>
-      )}
+      <HeroUINativeProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(auth)/login" options={{ animation: 'fade' }} />
+          <Stack.Screen name="(auth)/onboarding" options={{ animation: 'fade' }} />
+          <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
+        </Stack>
+        <StatusBar style="auto" />
+      </HeroUINativeProvider>
     </GestureHandlerRootView>
   );
 }
