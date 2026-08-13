@@ -1,46 +1,71 @@
-# Welcome to your HeroUI Native app 👋
+<div align="center">
+  <img src="./assets/images/icon.png" width="120" height="120" alt="CarYaar Logo" />
+  <h1>🚗 CarYaar</h1>
+  <p><b>The smartest way to split carpool costs, track trips, and settle balances with friends.</b></p>
+</div>
 
-This is an [Expo](https://expo.dev) project preconfigured with
-[HeroUI Native](https://heroui.com/docs/native), [Uniwind](https://docs.uniwind.dev)
-(Tailwind CSS for React Native), and [Expo Router](https://docs.expo.dev/router/introduction)
-with a bottom-tab layout.
+---
 
-## Get started
+## 📖 About CarYaar
+CarYaar is a modern React Native application designed to take the awkwardness out of splitting gas money. Whether you are commuting to work, going on a road trip, or just driving friends around town, CarYaar automatically calculates who owes what, tracks live routes, and lets you settle up instantly via UPI.
 
-1. Install dependencies
+## ✨ Key Features
+* 🗺️ **Live Trip Tracking**: Uses `expo-location` and Google Maps integrations to accurately track trip distances and routes in real-time.
+* 💸 **Instant UPI Settlements**: Deep-linked payment integration allows riders to instantly settle their balances via Google Pay, PhonePe, or Paytm with one tap.
+* 👥 **Group Management**: Create private groups, generate invite codes, and use deep links to seamlessly add friends to your carpools.
+* 📊 **Smart Cost Splitting**: Automatically calculates balances. Only the passengers split the total trip cost, fairly compensating the driver.
+* 🔒 **Secure & Real-time**: Powered by Supabase for lightning-fast real-time database updates, row-level security (RLS), and secure authentication.
+* 🎨 **Beautiful UI**: Designed with a custom bold aesthetic using NativeWind (Tailwind CSS) and fluid micro-animations via React Native Reanimated.
 
+## 🛠️ Tech Stack
+* **Framework**: [React Native](https://reactnative.dev/) & [Expo](https://expo.dev/) (Expo Router)
+* **Backend**: [Supabase](https://supabase.com/) (PostgreSQL, Auth, Realtime)
+* **State Management**: [Zustand](https://zustand-demo.pmnd.rs/)
+* **Styling**: [NativeWind](https://www.nativewind.dev/) (Tailwind CSS) & HeroUI Native
+* **Animations**: `react-native-reanimated`
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) installed
+- [Expo CLI](https://docs.expo.dev/get-started/installation/) installed
+- Expo Go app on your mobile device (or an Android/iOS emulator)
+- A Supabase account and project (for backend configuration)
+
+### Installation
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Phaze19/CarYaar.git
+   cd CarYaar
+   ```
+
+2. **Install dependencies**
    ```bash
    npm install
    ```
 
-2. Start the app
+3. **Set up Environment Variables**
+   Create a `.env` file in the root directory and add your Supabase credentials:
+   ```env
+   EXPO_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
+4. **Run the App**
    ```bash
    npx expo start
    ```
+   Scan the QR code with the Expo Go app on your phone, or press `a` to run on an Android emulator.
 
-In the output, you'll find options to open the app in a
+## 📦 Building for Production
+This app is configured to be built using [EAS (Expo Application Services)](https://expo.dev/eas).
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+To generate a production Android APK:
+```bash
+eas build -p android --profile preview
+```
 
-You can start developing by editing the files inside the **src/app** directory. The tabs themselves live under `src/app/(tabs)/`. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## What's preconfigured
-
-- **HeroUI Native** (`heroui-native`) wrapped in `HeroUINativeProvider` and `GestureHandlerRootView` in `src/app/_layout.tsx`
-- **Uniwind** + **Tailwind CSS** wired through `metro.config.js` and `src/global.css`
-- All HeroUI Native mandatory peer dependencies: `react-native-reanimated`, `react-native-gesture-handler`, `react-native-worklets`, `react-native-safe-area-context`, `react-native-svg`, `react-native-screens`
-- `@gorhom/bottom-sheet` for bottom-sheet UIs
-- `@expo/vector-icons` (Ionicons) for tab bar icons
-- TypeScript with `strict: true` and `@/*` path alias to `./src/*`
-- React Compiler enabled
-
-## Learn more
-
-- [HeroUI Native components](https://heroui.com/docs/native) — full component reference
-- [Expo documentation](https://docs.expo.dev/) — Expo fundamentals and guides
-- [Uniwind documentation](https://docs.uniwind.dev) — Tailwind for React Native
-- [Expo Router](https://docs.expo.dev/router/introduction) — file-based routing
+## 📜 License
+This project is for personal use and beta testing. All rights reserved.

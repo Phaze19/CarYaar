@@ -51,7 +51,7 @@ export default function FriendsScreen() {
             onPress: async () => {
               try {
                 await Share.share({
-                  message: `Hey! I'm using CarYaar to easily split carpool costs. Download the app here to join me:\n\nhttps://expo.dev/accounts/anuragvedak/projects/caryaar/builds/211d7175-ca8a-4a49-a29c-ab26af469091`
+                  message: `Hey! I'm using CarYaar to easily split carpool costs. Download the app here to join me:\n\nhttps://expo.dev/accounts/anuragvedak/projects/caryaar/builds/512bfb5b-10b9-402c-9ba6-a3d14982cb25`
                 });
               } catch (error: any) {
                 alert(error.message);
