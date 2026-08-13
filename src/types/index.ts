@@ -10,6 +10,8 @@ export interface Trip {
   id: string;
   driver_id: string;
   group_id?: string;
+  destination_name?: string;
+  scheduled_time?: string;
   date: string;
   distance_km: number;
   fuel_price: number;

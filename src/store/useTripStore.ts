@@ -76,6 +76,38 @@ export const useTripStore = create<TripState>((set, get) => ({
     if (data) {
       set({ currentTrip: data });
       get().subscribeToRiders(data.id);
+      
+      // Phase 7: Push Notifications on Trip Creation
+      try {
+        const { data: driverData } = await supabase.from('users').select('name').eq('id', trip.driver_id).single();
+        const driverName = driverData?.name || 'A driver';
+        const destStr = (trip as any).destination_name ? ` to ${(trip as any).destination_name}` : '';
+        const msg = `A new trip${destStr} has been created by ${driverName}.`;
+        
+        let targetUserIds: string[] = [];
+        
+        if (trip.group_id) {
+           const { data: members } = await supabase.from('group_members').select('user_id').eq('group_id', trip.group_id);
+           if (members) targetUserIds = members.map(m => m.user_id).filter(id => id !== trip.driver_id);
+        } else {
+           const { data: friends } = await supabase.from('friends').select('user1_id, user2_id').eq('status', 'accepted').or(`user1_id.eq.${trip.driver_id},user2_id.eq.${trip.driver_id}`);
+           if (friends) {
+             targetUserIds = friends.map(f => f.user1_id === trip.driver_id ? f.user2_id : f.user1_id);
+           }
+        }
+        
+        if (targetUserIds.length > 0) {
+           const { data: usersData } = await supabase.from('users').select('push_token').in('id', targetUserIds);
+           if (usersData) {
+             usersData.forEach(u => {
+               if (u.push_token) sendPushNotification(u.push_token, 'New Trip Available!', msg);
+             });
+           }
+        }
+      } catch (e) {
+         console.log("Error sending creation push notification:", e);
+      }
+      
       return data;
     }
     return null;
