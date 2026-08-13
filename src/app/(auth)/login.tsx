@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
-import { Button } from 'heroui-native';
+import { Button, Input } from 'heroui-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import Feather from '@expo/vector-icons/Feather';
 import { supabase } from '../../lib/supabase';
@@ -13,7 +13,30 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(false);
-  const { bypassLogin } = useAuthStore();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleEmailAuth = async (type: 'login' | 'signup') => {
+    if (!email || !password) {
+      Alert.alert("Error", "Please enter both email and password.");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      if (type === 'signup') {
+        const { error } = await supabase.auth.signUp({ email, password });
+        if (error) throw error;
+        // If "Confirm email" is disabled, they are automatically signed in here!
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+      }
+    } catch (err: any) {
+      Alert.alert("Authentication Failed", err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleOAuth = async (provider: 'google' | 'apple') => {
     setIsLoading(true);
@@ -68,37 +91,46 @@ export default function LoginScreen() {
             </Animated.View>
 
             <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="space-y-4 gap-4">
+              <Input
+                placeholder="Email Address"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                className="w-full h-16 border-4 border-black rounded-2xl bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-lg px-4"
+                style={{ fontFamily: 'Poppins_600SemiBold' }}
+              />
+              
+              <Input
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                className="w-full h-16 border-4 border-black rounded-2xl bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-lg px-4"
+                style={{ fontFamily: 'Poppins_600SemiBold' }}
+              />
+
               <Button 
                 size="lg"
-                onPress={() => handleOAuth('google')}
-                className="w-full bg-yellow-400 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl flex-row items-center justify-center h-16" 
+                onPress={() => handleEmailAuth('login')}
+                className="w-full bg-yellow-400 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl flex-row items-center justify-center h-16 mt-2" 
                 isDisabled={isLoading}
               >
-                <Feather name="mail" size={24} color="black" style={{ marginRight: 12 }} />
-                <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Continue with Google</Text>
+                <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Log In</Text>
               </Button>
 
               <Button 
                 size="lg"
-                onPress={() => handleOAuth('apple')}
-                className="w-full bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl flex-row items-center justify-center h-16" 
+                onPress={() => handleEmailAuth('signup')}
+                className="w-full bg-red-500 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-2xl flex-row items-center justify-center h-16" 
                 isDisabled={isLoading}
               >
-                <Feather name="aperture" size={24} color="black" style={{ marginRight: 12 }} />
-                <Text className="text-black text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Continue with Apple</Text>
+                <Text className="text-white text-xl" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Create Account</Text>
               </Button>
               
               <Text className="text-black text-xs text-center mt-6 font-bold" style={{ fontFamily: 'Poppins_600SemiBold' }}>
-                By continuing, you agree to our Terms of Service and Privacy Policy.
+                By creating an account, you agree to our Terms of Service and Privacy Policy.
               </Text>
-              
-              <Button 
-                size="md"
-                onPress={bypassLogin}
-                className="w-full bg-transparent mt-4 border-2 border-dashed border-red-500" 
-              >
-                <Text className="text-red-500 font-bold text-base" style={{ fontFamily: 'Poppins_700Bold' }}>Dev Bypass (Simulator Only)</Text>
-              </Button>
             </Animated.View>
 
           </View>
