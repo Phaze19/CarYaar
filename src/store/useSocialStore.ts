@@ -18,7 +18,7 @@ interface SocialState {
   addFriendToGroup: (groupId: string, friendUserId: string) => Promise<boolean>;
   
   fetchFriends: (userId: string) => Promise<void>;
-  sendFriendRequest: (myUserId: string, friendPhone: string) => Promise<boolean>;
+  sendFriendRequest: (myUserId: string, friendPhone: string) => Promise<'SUCCESS' | 'NOT_FOUND' | 'SELF' | 'EXISTS' | 'ERROR'>;
   acceptFriendRequest: (friendshipId: string) => Promise<void>;
   removeFriend: (friendshipId: string) => Promise<boolean>;
 }
@@ -175,13 +175,11 @@ export const useSocialStore = create<SocialState>((set, get) => ({
       .single();
       
     if (!targetUser) {
-      alert("No user found with that phone number.");
-      return false;
+      return 'NOT_FOUND';
     }
     
     if (targetUser.id === myUserId) {
-      alert("You cannot add yourself.");
-      return false;
+      return 'SELF';
     }
     
     const { error } = await supabase
@@ -189,13 +187,13 @@ export const useSocialStore = create<SocialState>((set, get) => ({
       .insert({ user1_id: myUserId, user2_id: targetUser.id });
       
     if (error) {
-       if (error.code === '23505') alert("A friend request already exists between you two.");
-       else alert(error.message);
-       return false;
+       if (error.code === '23505') return 'EXISTS';
+       alert(error.message);
+       return 'ERROR';
     }
     
     alert("Friend request sent!");
-    return true;
+    return 'SUCCESS';
   },
 
   acceptFriendRequest: async (friendshipId) => {

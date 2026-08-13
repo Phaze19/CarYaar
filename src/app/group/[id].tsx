@@ -44,7 +44,7 @@ export default function GroupDetailsScreen() {
     if (!group?.invite_code) return;
     try {
       await Share.share({
-        message: `Join my carpool group "${group.name}" on CarYaar!\nInvite Code: ${group.invite_code}\nor click here: caryaar://group/invite/${group.invite_code}`,
+        message: `Join my carpool group "${group.name}" on CarYaar!\nInvite Code: ${group.invite_code}\n\nDownload the app here: https://expo.dev/artifacts/eas/YOUR_BUILD_LINK_HERE.apk`,
       });
     } catch (error: any) {
       alert(error.message);

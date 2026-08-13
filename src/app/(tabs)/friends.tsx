@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, ScrollView, RefreshControl, Alert, Share } from 'react-native';
 import { Button, Input } from 'heroui-native';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useSocialStore } from '../../store/useSocialStore';
@@ -35,11 +35,37 @@ export default function FriendsScreen() {
   const handleSendRequest = async () => {
     if (!phoneToInvite || !user) return;
     setIsSending(true);
-    const success = await sendFriendRequest(user.id, phoneToInvite);
-    if (success) {
+    const result = await sendFriendRequest(user.id, phoneToInvite);
+    
+    if (result === 'SUCCESS') {
       setPhoneToInvite('');
       loadData();
+    } else if (result === 'NOT_FOUND') {
+      Alert.alert(
+        "User Not Found",
+        "This phone number is not registered on CarYaar. Would you like to invite them to download the app?",
+        [
+          { text: "Cancel", style: "cancel" },
+          { 
+            text: "Invite", 
+            onPress: async () => {
+              try {
+                await Share.share({
+                  message: `Hey! I'm using CarYaar to easily split carpool costs. Download the app here to join me:\n\nhttps://expo.dev/artifacts/eas/YOUR_BUILD_LINK_HERE.apk`
+                });
+              } catch (error: any) {
+                alert(error.message);
+              }
+            }
+          }
+        ]
+      );
+    } else if (result === 'SELF') {
+      alert("You cannot add yourself.");
+    } else if (result === 'EXISTS') {
+      alert("A friend request already exists between you two.");
     }
+    
     setIsSending(false);
   };
 
