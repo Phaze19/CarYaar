@@ -115,7 +115,13 @@ export const useTripStore = create<TripState>((set, get) => ({
 
   addRider: async (rider) => {
     const { error } = await supabase.from('trip_riders').insert(rider);
-    if (error) alert(error.message);
+    if (error) {
+      if (error.code === '23505') {
+        // Do nothing, they are already checked in. It might just be a double tap.
+      } else {
+        alert(error.message);
+      }
+    }
   },
 
   updateRiderStatus: async (riderId, status) => {

@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from 'heroui-native';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useTripStore } from '../../store/useTripStore';
+import { supabase } from '../../lib/supabase';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 
 export default function TripDetailScreen() {
@@ -62,22 +63,27 @@ export default function TripDetailScreen() {
   const handlePay = async () => {
     if (!myRiderRecord || !user) return;
     
-    const driverUpi = "driver@okbank"; 
+    // Fetch actual driver UPI ID
+    const { data: driverData } = await supabase
+      .from('users')
+      .select('upi_id, name')
+      .eq('id', currentTrip.driver_id)
+      .single();
+      
+    const driverUpi = driverData?.upi_id || "driver@okbank"; 
+    const driverName = driverData?.name ? encodeURIComponent(driverData.name) : "CarYaar Driver";
     const amount = costPerRider.toFixed(2);
     
-    const upiUrl = `upi://pay?pa=${driverUpi}&pn=CarYaar Driver&am=${amount}&cu=INR&tn=CarYaar_Trip_${currentTrip.id}`;
+    const upiUrl = `upi://pay?pa=${driverUpi}&pn=${driverName}&am=${amount}&cu=INR&tn=CarYaar_Trip_${currentTrip.id}`;
     
     try {
-      const supported = await Linking.canOpenURL(upiUrl);
-      if (supported) {
-        await Linking.openURL(upiUrl);
-        updateRiderStatus(myRiderRecord.id, 'paid');
-      } else {
-        alert("No UPI app found. Simulating payment.");
-        updateRiderStatus(myRiderRecord.id, 'paid');
-      }
+      // Android package visibility means canOpenURL might return false even if a UPI app is installed.
+      // So we just try to open it directly.
+      await Linking.openURL(upiUrl);
+      updateRiderStatus(myRiderRecord.id, 'paid');
     } catch (e) {
-      alert("Error opening UPI app.");
+      alert("No UPI app found. Simulating payment.");
+      updateRiderStatus(myRiderRecord.id, 'paid');
     }
   };
 
