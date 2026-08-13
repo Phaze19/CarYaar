@@ -93,21 +93,23 @@ export default function LoginScreen() {
             <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="space-y-4 gap-4">
               <Input
                 placeholder="Email Address"
+                placeholderTextColor="#737373"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 className="w-full h-16 border-4 border-black rounded-2xl bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-lg px-4"
-                style={{ fontFamily: 'Poppins_600SemiBold' }}
+                style={{ color: 'black', fontFamily: 'Poppins_600SemiBold' }}
               />
               
               <Input
                 placeholder="Password"
+                placeholderTextColor="#737373"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
                 className="w-full h-16 border-4 border-black rounded-2xl bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-lg px-4"
-                style={{ fontFamily: 'Poppins_600SemiBold' }}
+                style={{ color: 'black', fontFamily: 'Poppins_600SemiBold' }}
               />
 
               <Button 

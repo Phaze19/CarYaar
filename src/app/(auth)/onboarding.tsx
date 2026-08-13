@@ -6,6 +6,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 export default function OnboardingScreen() {
+  const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [upiId, setUpiId] = useState('');
   
@@ -13,12 +14,12 @@ export default function OnboardingScreen() {
   const router = useRouter();
 
   const handleComplete = async () => {
-    if (!phone) {
-      alert("Phone number is required.");
+    if (!name || !phone) {
+      alert("Name and Phone number are required.");
       return;
     }
     
-    await completeOnboarding(phone, upiId);
+    await completeOnboarding(name, phone, upiId);
   };
 
   return (
@@ -36,6 +37,19 @@ export default function OnboardingScreen() {
             </Animated.View>
 
             <Animated.View entering={FadeInUp.duration(800).delay(200).springify()} className="bg-white p-6 rounded-3xl border-4 border-black shadow-[6px_6px_0px_0px_rgba(239,68,68,1)] space-y-4 gap-5">
+              <View>
+                <Text className="text-black font-bold text-lg mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Full Name</Text>
+                <Input 
+                  placeholder="Rahul Kumar" 
+                  placeholderTextColor="#737373"
+                  style={{ color: 'black', fontFamily: 'Poppins_600SemiBold' }}
+                  value={name}
+                  onChangeText={setName}
+                  autoCapitalize="words"
+                  className="border-2 border-black bg-white rounded-xl h-14 text-black"
+                />
+              </View>
+
               <View>
                 <Text className="text-black font-bold text-lg mb-2" style={{ fontFamily: 'RacingSansOne_400Regular' }}>Phone Number</Text>
                 <Input 

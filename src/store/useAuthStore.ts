@@ -9,7 +9,7 @@ interface AuthState {
   checkSession: () => Promise<void>;
   logout: () => Promise<void>;
   updateProfile: (updates: Partial<User>) => Promise<void>;
-  completeOnboarding: (phone: string, upiId: string) => Promise<void>;
+  completeOnboarding: (name: string, phone: string, upiId: string) => Promise<void>;
   bypassLogin: () => void;
 }
 
@@ -60,7 +60,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     });
   },
 
-  completeOnboarding: async (phone: string, upiId: string) => {
+  completeOnboarding: async (name: string, phone: string, upiId: string) => {
     set({ isLoading: true });
     const { data: { session } } = await supabase.auth.getSession();
     
@@ -73,7 +73,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     // Create their profile record
     const newUser = {
       id: session.user.id,
-      name: session.user.user_metadata?.full_name || 'New User',
+      name: name || 'User',
       phone: phone,
       upi_id: upiId,
       default_fuel_avg: 15.0
